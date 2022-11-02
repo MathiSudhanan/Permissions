@@ -1,0 +1,384 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Companies {
+  id                   String                  @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String                  @unique
+  description          String
+  isActive             Boolean
+  createdById          String                  @db.ObjectId
+  CreatedBy            Users                   @relation("CreatedByCompany", fields: [createdById], references: [id])
+  createdAt            DateTime                @default(now())
+  modifiedById         String?                 @db.ObjectId
+  ModifiedBy           Users?                  @relation("ModifiedByCompany", fields: [modifiedById], references: [id])
+  modifiedAt           DateTime?               @updatedAt
+  CompanyUserGroups    CompanyUserGroup[]      @relation("CompanyUserGroup")
+  CompanyCFPermissions ClientFundPermissions[] @relation("CompanyCFPermissions")
+  ClientFunds          ClientFunds[]           @relation("ClientFundCompany")
+}
+
+model UserGroups {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
+  description String
+  isActive    Boolean
+
+  createdById  String    @db.ObjectId
+  CreatedBy    Users     @relation("CreatedByUserGroup", fields: [createdById], references: [id])
+  createdAt    DateTime  @default(now())
+  modifiedById String?   @db.ObjectId
+  ModifiedBy   Users?    @relation("ModifiedByUserGroup", fields: [modifiedById], references: [id])
+  modifiedAt   DateTime? @updatedAt
+
+  UserGroups           CompanyUserGroup[]      @relation("CompanyUserGroup")
+  CompanyCFPermissions ClientFundPermissions[] @relation("UGCFPermissions")
+}
+
+model CompanyUserGroup {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  companyId   String @db.ObjectId
+  userGroupId String @db.ObjectId
+
+  Company      Companies  @relation("CompanyUserGroup", fields: [companyId], references: [id])
+  isActive     Boolean
+  createdById  String     @db.ObjectId
+  CreatedBy    Users      @relation("CreatedByCompanyUserGroup", fields: [createdById], references: [id])
+  createdAt    DateTime   @default(now())
+  modifiedById String?    @db.ObjectId
+  ModifiedBy   Users?     @relation("ModifiedByCompanyUserGroup", fields: [modifiedById], references: [id])
+  modifiedAt   DateTime?  @updatedAt
+  UserGroup    UserGroups @relation("CompanyUserGroup", fields: [userGroupId], references: [id])
+
+  CUGProfiles CUGProfile[] @relation("CUGProfileCUG")
+
+  @@unique(fields: [companyId, userGroupId], name: "companyUserGroupId")
+}
+
+model Users {
+  id                            String                @id @default(auto()) @map("_id") @db.ObjectId
+  firstName                     String
+  lastName                      String
+  password                      String
+  email                         String                @unique
+  isActive                      Boolean
+  createdById                   String?               @unique @db.ObjectId
+  createdAt                     DateTime              @default(now())
+  modifiedById                  String?               @unique @db.ObjectId
+  CreatedBy                     Users?                @relation("CreatedBy", fields: [createdById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  CreatedByUser                 Users?                @relation("CreatedBy")
+  ModifiedBy                    Users?                @relation("ModifiedBy", fields: [modifiedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  ModifiedByUser                Users?                @relation("ModifiedBy")
+  BaseProfileCreatedBy          BaseProfiles[]        @relation("CreatedByBaseProfile")
+  BaseProfileModifiedBy         BaseProfiles[]        @relation("ModifiedByBaseProfile")
+  categoryCreatedBy             categories[]          @relation("CreatedByCategory")
+  categoryModifiedBy            categories[]          @relation("ModifiedByCategory")
+  statsCreatedBy                stats[]               @relation("CreatedByStat")
+  statsModifiedBy               stats[]               @relation("ModifiedByStat")
+  BaseProfileCategoryCreatedBy  BaseProfileCategory[] @relation("CreatedByBaseProfileCategory")
+  BaseProfileCategoryModifiedBy BaseProfileCategory[] @relation("ModifiedByBaseProfileCategory")
+  BaseProfileStatCreatedBy      BaseProfileStat[]     @relation("CreatedByBaseProfileStat")
+  BaseProfileStatModifiedBy     BaseProfileStat[]     @relation("ModifiedByBaseProfileStat")
+  FundCreatedBy                 Funds[]               @relation("CreatedByFund")
+  FundModifiedBy                Funds[]               @relation("ModifiedByFund")
+  ClientFundCreatedBy           ClientFunds[]         @relation("CreatedByClientFund")
+  ClientFundModifiedBy          ClientFunds[]         @relation("ModifiedByClientFund")
+  CompanyCreatedBy              Companies[]           @relation("CreatedByCompany")
+  CompanyModifiedBy             Companies[]           @relation("ModifiedByCompany")
+
+  UserGroupsCreatedBy             UserGroups[]            @relation("CreatedByUserGroup")
+  UserGroupsModifiedBy            UserGroups[]            @relation("ModifiedByUserGroup")
+  ClientFundPermissionsCreatedBy  ClientFundPermissions[] @relation("CreatedByClientFund")
+  ClientFundPermissionsModifiedBy ClientFundPermissions[] @relation("ModifiedByClientFund")
+  CompanyUserGroupCreatedBy       CompanyUserGroup[]      @relation("CreatedByCompanyUserGroup")
+  CompanyUserGroupModifiedBy      CompanyUserGroup[]      @relation("ModifiedByCompanyUserGroup")
+  UserGroupMappingCreatedBy       UserGroupMapping[]      @relation("CreatedByUserGroupMapping")
+  UserGroupMappingModifiedBy      UserGroupMapping[]      @relation("ModifiedByUserGroupMapping")
+  UserGroupMapping                UserGroupMapping[]      @relation("UserGroupMapping")
+  User                            ClientFundPermissions[] @relation("UserCFPermissions")
+
+  CUGProfileCreatedBy          CUGProfile[]         @relation("CreatedByCUGProfile")
+  CUGProfileModifiedBy         CUGProfile[]         @relation("ModifiedByCUGProfile")
+  CUGProfileCategoryCreatedBy  CUGProfileCategory[] @relation("CreatedByCUGProfileCategory")
+  CUGProfileCategoryModifiedBy CUGProfileCategory[] @relation("ModifiedByCUGProfileCategory")
+  CUGProfileStatCreatedBy      CUGProfileStat[]     @relation("CreatedByCUGProfileStat")
+  CUGProfileStatModifiedBy     CUGProfileStat[]     @relation("ModifiedByCUGProfileStat")
+
+  HedgeFundProfileCreatedBy   HedgeFundProfile[]         @relation("CreatedByHFProfile")
+  HedgeFundProfileModifiedBy  HedgeFundProfile[]         @relation("ModifiedByHFProfile")
+  HFProfileCategoryCreatedBy  HedgeFundProfileCategory[] @relation("CreatedByHFProfileCategory")
+  HFProfileCategoryModifiedBy HedgeFundProfileCategory[] @relation("ModifiedByHFProfileCategory")
+  HFProfileStatCreatedBy      HedgeFundProfileStat[]     @relation("CreatedByHFProfileStat")
+  HFProfileStatModifiedBy     HedgeFundProfileStat[]     @relation("ModifiedByHFProfileStat")
+}
+
+model UserGroupMapping {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userGroupId String @db.ObjectId
+
+  Users   Users?  @relation("UserGroupMapping", fields: [usersId], references: [id])
+  usersId String? @db.ObjectId
+
+  isActive     Boolean
+  createdById  String    @db.ObjectId
+  CreatedBy    Users     @relation("CreatedByUserGroupMapping", fields: [createdById], references: [id])
+  createdAt    DateTime  @default(now())
+  modifiedById String?   @db.ObjectId
+  ModifiedBy   Users?    @relation("ModifiedByUserGroupMapping", fields: [modifiedById], references: [id])
+  modifiedAt   DateTime? @updatedAt
+}
+
+model BaseProfiles {
+  id                    String                @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String                @unique
+  description           String
+  isActive              Boolean
+  createdById           String                @db.ObjectId
+  CreatedBy             Users                 @relation("CreatedByBaseProfile", fields: [createdById], references: [id])
+  createdAt             DateTime              @default(now())
+  modifiedById          String?               @db.ObjectId
+  ModifiedBy            Users?                @relation("ModifiedByBaseProfile", fields: [modifiedById], references: [id])
+  modifiedAt            DateTime?             @updatedAt
+  BaseProfileCategories BaseProfileCategory[]
+  BaseProfileStats      BaseProfileStat[]
+  CUGProfile            CUGProfile[]          @relation("BaseProfileCUGProfile")
+}
+
+model categories {
+  id                    String                     @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String                     @unique
+  description           String
+  isSecurityLevel       Boolean
+  isActive              Boolean
+  createdById           String                     @db.ObjectId
+  CreatedBy             Users                      @relation("CreatedByCategory", fields: [createdById], references: [id])
+  createdAt             DateTime                   @default(now())
+  modifiedById          String?                    @db.ObjectId
+  ModifiedBy            Users?                     @relation("ModifiedByCategory", fields: [modifiedById], references: [id])
+  modifiedAt            DateTime?                  @updatedAt
+  BaseProfileCategories BaseProfileCategory[]      @relation("BaseProfileCategory")
+  CUGProfileCategories  CUGProfileCategory[]       @relation("CUGProfileCategory")
+  HFProfileCategories   HedgeFundProfileCategory[] @relation("HFProfileCategory")
+}
+
+model stats {
+  id               String                 @id @default(auto()) @map("_id") @db.ObjectId
+  name             String                 @unique
+  description      String
+  isSecurityLevel  Boolean
+  isActive         Boolean
+  createdById      String                 @db.ObjectId
+  CreatedBy        Users                  @relation("CreatedByStat", fields: [createdById], references: [id])
+  createdAt        DateTime               @default(now())
+  modifiedById     String?                @db.ObjectId
+  ModifiedBy       Users?                 @relation("ModifiedByStat", fields: [modifiedById], references: [id])
+  modifiedAt       DateTime?              @updatedAt
+  BaseProfileStats BaseProfileStat[]      @relation("BaseProfileStat")
+  CUGProfileStats  CUGProfileStat[]       @relation("CUGProfileStat")
+  HFProfileStats   HedgeFundProfileStat[] @relation("HFProfileStat")
+}
+
+model BaseProfileCategory {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  baseProfileId  String       @db.ObjectId
+  BaseProfile    BaseProfiles @relation(fields: [baseProfileId], references: [id])
+  categoryId     String       @db.ObjectId
+  Category       categories   @relation("BaseProfileCategory", fields: [categoryId], references: [id])
+  isPermissioned Boolean
+  isActive       Boolean
+  createdById    String       @db.ObjectId
+  CreatedBy      Users        @relation("CreatedByBaseProfileCategory", fields: [createdById], references: [id])
+  createdAt      DateTime     @default(now())
+  modifiedById   String?      @db.ObjectId
+  ModifiedBy     Users?       @relation("ModifiedByBaseProfileCategory", fields: [modifiedById], references: [id])
+  modifiedAt     DateTime?    @updatedAt
+}
+
+model BaseProfileStat {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  baseProfileId  String       @db.ObjectId
+  BaseProfile    BaseProfiles @relation(fields: [baseProfileId], references: [id])
+  statId         String       @db.ObjectId
+  Stat           stats        @relation("BaseProfileStat", fields: [statId], references: [id])
+  isPermissioned Boolean
+  isActive       Boolean
+  createdById    String       @db.ObjectId
+  CreatedBy      Users        @relation("CreatedByBaseProfileStat", fields: [createdById], references: [id])
+  createdAt      DateTime     @default(now())
+  modifiedById   String?      @db.ObjectId
+  ModifiedBy     Users?       @relation("ModifiedByBaseProfileStat", fields: [modifiedById], references: [id])
+  modifiedAt     DateTime?    @updatedAt
+}
+
+model CUGProfile {
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+  name               String           @unique
+  description        String
+  isActive           Boolean
+  companyUserGroupId String           @db.ObjectId
+  CompanyUserGroup   CompanyUserGroup @relation("CUGProfileCUG", fields: [companyUserGroupId], references: [id])
+  // companyId          String           @db.ObjectId
+  // Company            Companies        @relation("CUGProfileCompany", fields: [companyId], references: [id])
+  baseProfileId      String           @db.ObjectId
+  BaseProfile        BaseProfiles     @relation("BaseProfileCUGProfile", fields: [baseProfileId], references: [id])
+  createdById        String           @db.ObjectId
+  CreatedBy          Users            @relation("CreatedByCUGProfile", fields: [createdById], references: [id])
+  createdAt          DateTime         @default(now())
+  modifiedById       String?          @db.ObjectId
+  ModifiedBy         Users?           @relation("ModifiedByCUGProfile", fields: [modifiedById], references: [id])
+  modifiedAt         DateTime?        @updatedAt
+
+  CUGProfileCategories CUGProfileCategory[] @relation("CUGProfileCUGProfileCategory")
+  CUGProfileStats      CUGProfileStat[]     @relation("CUGProfileCUGProfileStat")
+}
+
+model CUGProfileCategory {
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  CUGProfileId   String     @db.ObjectId
+  CUGProfile     CUGProfile @relation("CUGProfileCUGProfileCategory", fields: [CUGProfileId], references: [id])
+  categoryId     String     @db.ObjectId
+  Category       categories @relation("CUGProfileCategory", fields: [categoryId], references: [id])
+  isPermissioned Boolean
+  isActive       Boolean
+  createdById    String     @db.ObjectId
+  CreatedBy      Users      @relation("CreatedByCUGProfileCategory", fields: [createdById], references: [id])
+  createdAt      DateTime   @default(now())
+  modifiedById   String?    @db.ObjectId
+  ModifiedBy     Users?     @relation("ModifiedByCUGProfileCategory", fields: [modifiedById], references: [id])
+  modifiedAt     DateTime?  @updatedAt
+}
+
+model CUGProfileStat {
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  CUGProfileId   String     @db.ObjectId
+  CUGProfile     CUGProfile @relation("CUGProfileCUGProfileStat", fields: [CUGProfileId], references: [id])
+  statId         String     @db.ObjectId
+  Stat           stats      @relation("CUGProfileStat", fields: [statId], references: [id])
+  isPermissioned Boolean
+  isActive       Boolean
+  createdById    String     @db.ObjectId
+  CreatedBy      Users      @relation("CreatedByCUGProfileStat", fields: [createdById], references: [id])
+  createdAt      DateTime   @default(now())
+  modifiedById   String?    @db.ObjectId
+  ModifiedBy     Users?     @relation("ModifiedByCUGProfileStat", fields: [modifiedById], references: [id])
+  modifiedAt     DateTime?  @updatedAt
+}
+
+model HedgeFundProfile {
+  id                         String                     @id @default(auto()) @map("_id") @db.ObjectId
+  name                       String                     @unique
+  description                String
+  isActive                   Boolean
+  createdById                String                     @db.ObjectId
+  CreatedBy                  Users                      @relation("CreatedByHFProfile", fields: [createdById], references: [id])
+  createdAt                  DateTime                   @default(now())
+  modifiedById               String?                    @db.ObjectId
+  ModifiedBy                 Users?                     @relation("ModifiedByHFProfile", fields: [modifiedById], references: [id])
+  modifiedAt                 DateTime?                  @updatedAt
+  HedgeFundProfileCategories HedgeFundProfileCategory[] @relation("HedgeFundProfileCategory")
+  HedgeFundProfileStats      HedgeFundProfileStat[]     @relation("HedgeFundProfileStat")
+}
+
+model HedgeFundProfileCategory {
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+  hedgeFundProfileId String           @db.ObjectId
+  HedgeFundProfile   HedgeFundProfile @relation("HedgeFundProfileCategory", fields: [hedgeFundProfileId], references: [id])
+  categoryId         String           @db.ObjectId
+  Category           categories       @relation("HFProfileCategory", fields: [categoryId], references: [id])
+  isPermissioned     Boolean
+  isActive           Boolean
+  createdById        String           @db.ObjectId
+  CreatedBy          Users            @relation("CreatedByHFProfileCategory", fields: [createdById], references: [id])
+  createdAt          DateTime         @default(now())
+  modifiedById       String?          @db.ObjectId
+  ModifiedBy         Users?           @relation("ModifiedByHFProfileCategory", fields: [modifiedById], references: [id])
+  modifiedAt         DateTime?        @updatedAt
+}
+
+model HedgeFundProfileStat {
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+  hedgeFundProfileId String           @db.ObjectId
+  HedgeFundProfile   HedgeFundProfile @relation("HedgeFundProfileStat", fields: [hedgeFundProfileId], references: [id])
+  statId             String           @db.ObjectId
+  Stat               stats            @relation("HFProfileStat", fields: [statId], references: [id])
+  isPermissioned     Boolean
+  isActive           Boolean
+  createdById        String           @db.ObjectId
+  CreatedBy          Users            @relation("CreatedByHFProfileStat", fields: [createdById], references: [id])
+  createdAt          DateTime         @default(now())
+  modifiedById       String?          @db.ObjectId
+  ModifiedBy         Users?           @relation("ModifiedByHFProfileStat", fields: [modifiedById], references: [id])
+  modifiedAt         DateTime?        @updatedAt
+}
+
+model Funds {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String    @unique
+  description     String
+  isActive        Boolean
+  isSecurityLevel Boolean
+  startDate       DateTime
+  endDate         DateTime?
+  isFOF           Boolean
+  createdById     String    @db.ObjectId
+  CreatedBy       Users     @relation("CreatedByFund", fields: [createdById], references: [id])
+  createdAt       DateTime  @default(now())
+  modifiedById    String?   @db.ObjectId
+  ModifiedBy      Users?    @relation("ModifiedByFund", fields: [modifiedById], references: [id])
+  modifiedAt      DateTime? @updatedAt
+
+  ClientFunds ClientFunds[] @relation("ClientFund")
+}
+
+model ClientFunds {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String  @unique
+  description     String
+  isActive        Boolean
+  isSecurityLevel Boolean
+  fundId          String  @db.ObjectId
+  Fund            Funds   @relation("ClientFund", fields: [fundId], references: [id])
+
+  startDate    DateTime
+  endDate      DateTime?
+  companyId    String    @db.ObjectId
+  Company      Companies @relation("ClientFundCompany", fields: [companyId], references: [id])
+  createdById  String    @db.ObjectId
+  CreatedBy    Users     @relation("CreatedByClientFund", fields: [createdById], references: [id])
+  createdAt    DateTime  @default(now())
+  modifiedById String?   @db.ObjectId
+  ModifiedBy   Users?    @relation("ModifiedByClientFund", fields: [modifiedById], references: [id])
+  modifiedAt   DateTime? @updatedAt
+}
+
+model ClientFundPermissions {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    @unique
+  description   String
+  fundId        String
+  isPemissioned Boolean
+  companyId     String?   @db.ObjectId
+  userGroupId   String?   @db.ObjectId
+  userId        String?   @db.ObjectId
+  createdById   String    @db.ObjectId
+  CreatedBy     Users     @relation("CreatedByClientFund", fields: [createdById], references: [id])
+  createdAt     DateTime  @default(now())
+  modifiedById  String?   @db.ObjectId
+  ModifiedBy    Users?    @relation("ModifiedByClientFund", fields: [modifiedById], references: [id])
+  modifiedAt    DateTime? @updatedAt
+
+  Company   Companies?  @relation("CompanyCFPermissions", fields: [companyId], references: [id])
+  UserGroup UserGroups? @relation("UGCFPermissions", fields: [companyId], references: [id])
+  User      Users?      @relation("UserCFPermissions", fields: [companyId], references: [id])
+}
