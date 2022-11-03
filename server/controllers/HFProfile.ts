@@ -1,9 +1,23 @@
-import { Console } from "console";
 import prisma from "../lib/prisma";
 
 export const getHFProfiles = async (req: any, res: any) => {
   try {
-    const HFProfiles = await prisma.hedgeFundProfile.findMany();
+    const HFProfiles = await (
+      await prisma.hedgeFundProfile.findMany({
+        include: {
+          Fund: true,
+        },
+      })
+    ).map((x) => {
+      return {
+        id: x.id,
+        name: x.name,
+        description: x.description,
+
+        fundName: x.Fund.name,
+        isActive: x.isActive,
+      };
+    });
 
     res.status(200).json(HFProfiles);
   } catch (error: any) {
@@ -14,14 +28,14 @@ export const getHFProfiles = async (req: any, res: any) => {
 export const getNewHFProfile = async (req: any, res: any) => {
   try {
     const stats = await prisma.stats.findMany();
-    const categories = await prisma.hedgeFundProfile.findMany();
+    const categories = await prisma.categories.findMany();
 
     const HFProfile = {
       id: "",
       name: "",
       description: "",
       isActive: true,
-      CUGProfileId: "",
+      fundId: "",
       HedgeFundProfileCategories: [
         ...categories.map((cat: any) => {
           return {
@@ -58,7 +72,9 @@ export const getHFProfileById = async (req: any, res: any) => {
 
     const HFProfile = await prisma.hedgeFundProfile.findUnique({
       where: { id: id },
+
       include: {
+        Fund: true,
         HedgeFundProfileCategories: {
           include: {
             Category: true,
@@ -72,8 +88,30 @@ export const getHFProfileById = async (req: any, res: any) => {
       },
     });
 
-    const stats = await prisma.stats.findMany();
-    const categories = await prisma.categories.findMany();
+    const stats = await (
+      await prisma.stats.findMany()
+    ).map((x) => {
+      return {
+        id: "",
+        statId: x.id,
+        statName: x.name,
+        isActive: x.isActive,
+        isPermissioned: null,
+        isModified: false,
+      };
+    });
+    const categories = await (
+      await prisma.categories.findMany()
+    ).map((x) => {
+      return {
+        id: "",
+        categoryId: x.id,
+        categoryName: x.name,
+        isActive: x.isActive,
+        isPermissioned: null,
+        isModified: false,
+      };
+    });
 
     const HFProfileCategoryResult = HFProfile?.HedgeFundProfileCategories.map(
       (x) => {
@@ -83,6 +121,7 @@ export const getHFProfileById = async (req: any, res: any) => {
           categoryName: x.Category.name,
           isActive: x.isActive,
           isPermissioned: x.isPermissioned,
+          isModified: false,
         };
       }
     );
@@ -94,6 +133,7 @@ export const getHFProfileById = async (req: any, res: any) => {
         statName: x.Stat.name,
         isActive: x.isActive,
         isPermissioned: x.isPermissioned,
+        isModified: false,
       };
     });
 
@@ -104,48 +144,29 @@ export const getHFProfileById = async (req: any, res: any) => {
     if (HFProfile?.HedgeFundProfileCategories && HFProfileCategoryResult) {
       hfProfile.HedgeFundProfileCategories = [
         ...HFProfileCategoryResult,
-        ...categories
-          .filter((f) => {
-            return (
-              HFProfileCategoryResult.findIndex(
-                (cat) => cat.categoryId === f.id
-              ) < 0
-            );
-          })
-          .map((x) => {
-            return {
-              id: "",
-              categoryId: x.id,
-              categoryName: x.name,
-              isActive: true,
-              isPermissioned: null,
-            };
-          }),
+        ...categories.filter((f) => {
+          return (
+            HFProfileCategoryResult.findIndex(
+              (cat) => cat.categoryId === f.categoryId
+            ) < 0
+          );
+        }),
       ];
     }
 
     if (HFProfile?.HedgeFundProfileStats && HFProfileStatResult) {
       hfProfile.HedgeFundProfileStats = [
         ...HFProfileStatResult,
-        ...stats
-          .filter((f) => {
-            return (
-              HFProfileStatResult.findIndex((stat) => stat.statId === f.id) < 0
-            );
-          })
-          .map((x) => {
-            return {
-              id: "",
-              statId: x.id,
-              statName: x.name,
-              isActive: true,
-              isPermissioned: null,
-            };
-          }),
+        ...stats.filter((f) => {
+          return (
+            HFProfileStatResult.findIndex((stat) => stat.statId === f.statId) <
+            0
+          );
+        }),
       ];
     }
 
-    res.status(200).json(HFProfile);
+    res.status(200).json(hfProfile);
   } catch (error) {
     res.status(404).json({ mesage: error });
   }
@@ -158,15 +179,8 @@ export const createHFProfile = async (req: any, res: any) => {
 
   try {
     post.CreatedBy = { connect: { id: userId } };
-    let {
-      id,
-      name,
-      description,
-      isActive,
-      baseProfileId,
-      isPermissioned,
-      CreatedBy,
-    } = post;
+    let { id, name, description, isActive, fundId, isPermissioned, CreatedBy } =
+      post;
     const HFData = {
       id,
       name,
@@ -174,10 +188,10 @@ export const createHFProfile = async (req: any, res: any) => {
       isActive,
       isPermissioned,
       CreatedBy,
-      baseProfileId,
+      Fund: { connect: { id: fundId } },
       HedgeFundProfileCategories: {
         create: [
-          ...post.HFCategories.map((x: any) => {
+          ...post.HFPCategories.map((x: any) => {
             return {
               Category: {
                 connect: {
@@ -193,7 +207,7 @@ export const createHFProfile = async (req: any, res: any) => {
       },
       HedgeFundProfileStats: {
         create: [
-          ...post.HFStats.map((x: any) => {
+          ...post.HFPStats.map((x: any) => {
             return {
               Stat: {
                 connect: {
@@ -225,15 +239,17 @@ export const modifyHFProfile = async (req: any, res: any) => {
     const userId = req.headers["userId"];
     let post = req.body;
 
-    let { name, description, isActive, isPermissioned, CreatedBy } = post;
+    let { name, description, isActive, fundId, isPermissioned, CreatedBy } =
+      post;
     const HFData = {
       name,
       description,
       isActive,
+      Fund: { connect: { id: fundId } },
 
       HedgeFundProfileCategories: {
         upsert: [
-          ...post.HFCategories.map((x: any) => {
+          ...post.HFPCategories.map((x: any) => {
             return {
               where: {
                 id: x.id,
@@ -265,7 +281,7 @@ export const modifyHFProfile = async (req: any, res: any) => {
       },
       HedgeFundProfileStats: {
         upsert: [
-          ...post.HFStats.map((x: any) => {
+          ...post.HFPStats.map((x: any) => {
             return {
               where: {
                 id: x.id,

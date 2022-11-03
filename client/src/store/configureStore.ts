@@ -11,6 +11,7 @@ import { companyUserGroupSlice } from "../features/CompanyUserGroup/companyUserG
 
 import { baseProfileSlice } from "../features/BaseProfile/baseProfileSlice";
 import { CUGProfileSlice } from "../features/CUGProfile/CUGProfileSlice";
+import { hedgeFundProfileSlice } from "../features/HFProfile/hedgeFundProfileSlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     companyUserGroup: companyUserGroupSlice.reducer,
     baseProfile: baseProfileSlice.reducer,
     cugProfile: CUGProfileSlice.reducer,
+    hedgeFundProfile: hedgeFundProfileSlice.reducer,
   },
 });
 
