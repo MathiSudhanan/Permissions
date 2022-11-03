@@ -103,6 +103,15 @@ const Main = () => {
         />
       ),
     },
+    {
+      page: "HF Profile",
+      path: "/HFProfileList",
+      iconTyp: (
+        <SupervisedUserCircleIcon
+          sx={{ fontSize: "5em", color: colors.blackPrimary }}
+        />
+      ),
+    },
   ];
   const isSmallOrLess = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();

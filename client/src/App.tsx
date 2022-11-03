@@ -33,6 +33,8 @@ import CUGProfile from "./components/CUGProfile/CUGProfile";
 import CUGProfileList from "./components/CUGProfile/CUGProfileList";
 import CompanyUserGroup from "./components/CompanyUserGroup/CompanyUserGroup";
 import CompanyUserGroupList from "./components/CompanyUserGroup/CompanyUserGroupList";
+import HedgeFundProfileList from "./components/HFProfile/HFProfileList";
+import HedgeFundProfile from "./components/HFProfile/HFProfile";
 
 const App = () => {
   const anonymousAuthPages = ["/login", "/signup", "/forgotPassword"];
@@ -317,6 +319,31 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <CUGProfile />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/HFProfileList"
+              element={
+                <PrivateRoute>
+                  <HedgeFundProfileList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/HFProfile"
+              element={
+                <PrivateRoute>
+                  <HedgeFundProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/HFProfile/:id"
+              element={
+                <PrivateRoute>
+                  <HedgeFundProfile />
                 </PrivateRoute>
               }
             />
