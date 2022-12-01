@@ -15,7 +15,14 @@ import company from "./routes/company";
 import clientFund from "./routes/clientFund";
 import fund from "./routes/fund";
 import userGroup from "./routes/userGroup";
+import userGroupMapping from "./routes/UserGroupMapping";
+import user from "./routes/user";
+
 import companyUserGroup from "./routes/companyUserGroup";
+
+import cfugProfile from "./routes/CFUGProfile";
+import cfuProfile from "./routes/CFUProfile";
+import finalPermissions from "./routes/finalPermissions";
 
 const app = express();
 
@@ -40,9 +47,15 @@ app.use("/category", category);
 app.use("/stat", stat);
 app.use("/company", company);
 app.use("/userGroup", userGroup);
+app.use("/userGroupMapping", userGroupMapping);
+app.use("/user", user);
+
 app.use("/companyUserGroup", companyUserGroup);
 app.use("/fund", fund);
 app.use("/clientFund", clientFund);
+app.use("/cfugprofile", cfugProfile);
+app.use("/cfuprofile", cfuProfile);
+app.use("/finalPermissions", finalPermissions);
 
 const PORT = process.env.PORT || 3500;
 

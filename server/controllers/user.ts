@@ -6,9 +6,59 @@ require("dotenv").config();
 
 export const getUsers = async (req: any, res: any) => {
   try {
-    const baseProfiles = await prisma.users.findMany();
+    const users = await prisma.users.findMany();
 
-    res.status(200).json(baseProfiles);
+    res.status(200).json(users);
+  } catch (error: any) {
+    console.log(error);
+    res.status(404).json({ mesage: error.message });
+  }
+};
+
+export const getUserById = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    console.log("UserId", id);
+    const user = await prisma.users.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json(user);
+  } catch (error: any) {
+    console.log(error);
+    res.status(404).json({ mesage: error.message });
+  }
+};
+
+export const getUsersByCompanyId = async (req: any, res: any) => {
+  try {
+    const { companyId } = req.params;
+
+    const companyUserGroup = await prisma.companyUserGroup.findFirst({
+      where: {
+        companyId: companyId,
+      },
+    });
+
+    const userGroupMappings = await prisma.userGroupMapping.findMany({
+      where: {
+        userGroupId: companyUserGroup?.userGroupId,
+      },
+      include: {
+        User: true,
+      },
+    });
+
+    res.status(200).json(
+      userGroupMappings.map((x) => {
+        return {
+          id: x.userId,
+          name: x.User?.firstName + " " + x.User?.lastName,
+        };
+      })
+    );
   } catch (error: any) {
     console.log(error);
     res.status(404).json({ mesage: error.message });
@@ -20,14 +70,38 @@ export const createUser = async (req: any, res: any) => {
 
   const salt = bcrypt.genSaltSync();
   post.password = bcrypt.hashSync(post.password, salt);
-  let baseProfile;
+  let user;
 
   try {
-    baseProfile = await prisma.users.create({ data: post });
+    user = await prisma.users.create({ data: post });
 
-    res.status(201).json(baseProfile);
+    res.status(201).json(user);
   } catch (error: any) {
     res.status(409).json({ mesage: error.message });
+  }
+};
+
+export const modifyUser = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    // const userId = req.get("userId");
+    let post = req.body;
+
+    const user = await prisma.users.update({
+      where: {
+        id: id,
+      },
+      data: {
+        firstName: post.firstName,
+        lastName: post.lastName,
+        email: post.email,
+
+        isActive: post.isActive,
+      },
+    });
+    res.status(200).json(user);
+  } catch (error: any) {
+    res.status(404).json({ mesage: error });
   }
 };
 

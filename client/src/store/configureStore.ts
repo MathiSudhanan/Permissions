@@ -7,11 +7,17 @@ import { companySlice } from "../features/Company/companySlice";
 import { fundSlice } from "../features/Fund/fundSlice";
 import { statSlice } from "../features/Stat/statSlice";
 import { userGroupSlice } from "../features/UserGroup/userGroupSlice";
+import { userGroupMappingSlice } from "../features/UserGroupMapping/userGroupMappingSlice";
+import { userSlice } from "../features/User/userSlice";
+
 import { companyUserGroupSlice } from "../features/CompanyUserGroup/companyUserGroupSlice";
 
 import { baseProfileSlice } from "../features/BaseProfile/baseProfileSlice";
 import { CUGProfileSlice } from "../features/CUGProfile/CUGProfileSlice";
 import { hedgeFundProfileSlice } from "../features/HFProfile/hedgeFundProfileSlice";
+import { cfugProfileSlice } from "../features/CFUGProfile/CFUGProfileSlice";
+import { cfuProfileSlice } from "../features/CFUProfile/CFUProfileSlice";
+import { finalPermissionsSlice } from "../features/FinalPermissions/finalPermissionsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,10 +28,16 @@ export const store = configureStore({
     fund: fundSlice.reducer,
     stat: statSlice.reducer,
     userGroup: userGroupSlice.reducer,
+    userGroupMapping: userGroupMappingSlice.reducer,
+    user: userSlice.reducer,
+
     companyUserGroup: companyUserGroupSlice.reducer,
     baseProfile: baseProfileSlice.reducer,
     cugProfile: CUGProfileSlice.reducer,
     hedgeFundProfile: hedgeFundProfileSlice.reducer,
+    cfugProfile: cfugProfileSlice.reducer,
+    cfuProfile: cfuProfileSlice.reducer,
+    finalPermissions: finalPermissionsSlice.reducer,
   },
 });
 

@@ -2,8 +2,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/pagination";
 import { store } from "../store/configureStore";
+// import { useNavigate } from "react-router";
 
-// import { myHistory } from "./history";
+import { myHistory } from "./history";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
@@ -16,9 +17,13 @@ const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 axios.interceptors.request.use((config: any) => {
   const token = store.getState().account.user?.token;
+  // const navigate = useNavigate();
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   } else {
+    // navigate("/");
+    // myHistory.replace("/");
   }
   // console.log("request: ", config);
   return config;
@@ -122,6 +127,30 @@ const HFProfile = {
   delete: (id: string) => requests.delete(`/hfProfile/${id}`),
 };
 
+const CFUGProfile = {
+  create: (values: any) => requests.post("/cfugProfile", values),
+  new: () => requests.get("/cfugProfile/new"),
+  getOtherProfiles: (clientFundId: string, userGroupId: string) =>
+    requests.get(`/cfugProfile/new/${clientFundId}/${userGroupId}`),
+  modify: (id: string, values: any) =>
+    requests.patch(`/cfugProfile/${id}`, values),
+  getAll: () => requests.get("/cfugProfile"),
+  getById: (id: string) => requests.get(`/cfugProfile/${id}`),
+  delete: (id: string) => requests.delete(`/cfugProfile/${id}`),
+};
+
+const CFUProfile = {
+  create: (values: any) => requests.post("/cfuProfile", values),
+  new: () => requests.get("/cfuProfile/new"),
+  getOtherProfiles: (clientFundId: string, userGroupId: string) =>
+    requests.get(`/cfuProfile/new/${clientFundId}/${userGroupId}`),
+  modify: (id: string, values: any) =>
+    requests.patch(`/cfuProfile/${id}`, values),
+  getAll: () => requests.get("/cfuProfile"),
+  getById: (id: string) => requests.get(`/cfuProfile/${id}`),
+  delete: (id: string) => requests.delete(`/cfuProfile/${id}`),
+};
+
 const Category = {
   create: (values: any) => requests.post("/category", values),
   modify: (id: string, values: any) =>
@@ -152,6 +181,8 @@ const ClientFund = {
   modify: (id: string, values: any) =>
     requests.patch(`/clientFund/${id}`, values),
   getAll: () => requests.get("/clientFund"),
+  getByCompanyId: (companyId: string) =>
+    requests.get(`/clientFund/cug/${companyId}`),
   getById: (id: string) => requests.get(`/clientFund/${id}`),
   delete: (id: string) => requests.delete(`/clientFund/${id}`),
 };
@@ -173,13 +204,41 @@ const UserGroup = {
   delete: (id: string) => requests.delete(`/userGroup/${id}`),
 };
 
+const UserGroupMapping = {
+  getUsersByUserGroupId: (userGroupId: string) =>
+    requests.get(`/userGroupMapping/Users/${userGroupId}`),
+  create: (values: any) => requests.post("/userGroupMapping", values),
+  modify: (id: string, values: any) =>
+    requests.patch(`/userGroupMapping/${id}`, values),
+  getAll: () => requests.get("/userGroupMapping"),
+  getById: (id: string) => requests.get(`/userGroupMapping/${id}`),
+  delete: (id: string) => requests.delete(`/userGroupMapping/${id}`),
+};
+
+const User = {
+  create: (values: any) => requests.post("/user", values),
+  modify: (id: string, values: any) => requests.patch(`/user/${id}`, values),
+  getAll: () => requests.get("/user"),
+  getById: (id: string) => requests.get(`/user/${id}`),
+  getUsersByCompanyId: (companyId: string) =>
+    requests.get(`/user/company/${companyId}`),
+  delete: (id: string) => requests.delete(`/user/${id}`),
+};
+
 const CompanyUserGroup = {
   create: (values: any) => requests.post("/companyUserGroup", values),
   modify: (id: string, values: any) =>
     requests.patch(`/companyUserGroup/${id}`, values),
   getAll: () => requests.get("/companyUserGroup"),
   getById: (id: string) => requests.get(`/companyUserGroup/${id}`),
+  getByCompanyId: (companyId: string) =>
+    requests.get(`/companyUserGroup/cug/${companyId}`),
   delete: (id: string) => requests.delete(`/companyUserGroup/${id}`),
+};
+
+const FinalPermissions = {
+  getById: (clientFundId: string, userId: string) =>
+    requests.get(`/finalPermissions/${clientFundId}/${userId}`),
 };
 
 const agent = {
@@ -191,9 +250,14 @@ const agent = {
   ClientFund,
   CUGProfile,
   HFProfile,
+  CFUGProfile,
+  CFUProfile,
   Fund,
   Stat,
   UserGroup,
+  User,
+  UserGroupMapping,
+  FinalPermissions,
 };
 
 export default agent;

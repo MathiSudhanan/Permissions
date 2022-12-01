@@ -103,7 +103,6 @@ const TriStateSwitch = ({
       }
     }
   };
-  console.log("Value", item);
 
   return (
     <div

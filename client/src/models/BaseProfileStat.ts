@@ -1,9 +1,5 @@
-export interface IBaseProfileStat {
-  id: string;
-  statId: string;
-  statName: string;
-  isPermissioned: boolean;
-  isActive: boolean;
+import { IBaseStat } from "./BaseStat";
+
+export interface IBaseProfileStat extends IBaseStat {
   baseProfileId: string;
-  isModified: boolean;
 }

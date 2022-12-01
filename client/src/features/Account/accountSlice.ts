@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import agent from "../../api/agent";
-import { IUser } from "../../models/User";
+import { IUserAccount } from "../../models/User";
 
 export interface AccountState {
-  user: IUser | null;
+  user: IUserAccount | null;
   isSessionExpired: boolean;
   redirectUrl: string;
 }
@@ -16,7 +16,7 @@ const initialState: AccountState = {
   redirectUrl: "",
 };
 
-export const signInUser = createAsyncThunk<IUser, FieldValues>(
+export const signInUser = createAsyncThunk<IUserAccount, FieldValues>(
   "account/signInUser",
   async (data: FieldValues, thunkAPI: any) => {
     try {
@@ -30,7 +30,7 @@ export const signInUser = createAsyncThunk<IUser, FieldValues>(
   }
 );
 
-export const registerUser = createAsyncThunk<IUser, FieldValues>(
+export const registerUser = createAsyncThunk<IUserAccount, FieldValues>(
   "account/registerUser",
   async (data: FieldValues, thunkAPI: any) => {
     try {
@@ -48,7 +48,7 @@ export const registerUser = createAsyncThunk<IUser, FieldValues>(
   }
 );
 
-export const fetchCurrentUser = createAsyncThunk<IUser>(
+export const fetchCurrentUser = createAsyncThunk<IUserAccount>(
   "account/fetchCurrentUser",
   async (_: any, thunkAPI: any) => {
     thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));

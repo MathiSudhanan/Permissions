@@ -1,9 +1,5 @@
-export interface ICUGProfileStat {
-  id: string;
-  statId: string;
-  statName: string;
-  isPermissioned: boolean;
-  isActive: boolean;
+import { IBaseStat } from "./BaseStat";
+
+export interface ICUGProfileStat extends IBaseStat {
   cUGProfileId: string;
-  isModified: boolean;
 }

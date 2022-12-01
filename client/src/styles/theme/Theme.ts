@@ -17,6 +17,8 @@ export const colors = {
   red: "#f44336",
   green: "#009688",
   orange: "#ff9800",
+  success: "#80cbc4",
+  error: "#ef9a9a",
 };
 
 export const theme = createTheme({
@@ -28,6 +30,12 @@ export const theme = createTheme({
     },
     secondary: {
       main: colors.gray,
+    },
+    success: {
+      main: colors.success,
+    },
+    error: {
+      main: colors.error,
     },
   },
 });

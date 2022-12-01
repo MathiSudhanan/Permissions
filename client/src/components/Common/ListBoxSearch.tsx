@@ -21,8 +21,9 @@ const ListBoxSearch = ({
 }) => {
   const dataFilterChange = (event, dataArray, setDataArrayValue) => {
     let filtered = dataArray.filter((x) =>
-      x.name.toLowerCase().startsWith(event.target.value.toLowerCase())
+      x.categoryName.toLowerCase().startsWith(event.target.value.toLowerCase())
     );
+    console.log("Filtered", filtered);
     setDataArrayValue(filtered);
   };
 

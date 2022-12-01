@@ -257,7 +257,7 @@ const CUGProfile = () => {
       {
         name: "Categories",
         Props: {
-          CUGProfileCategories: cugProfile?.CUGProfileCategories,
+          Categories: cugProfile?.CUGProfileCategories,
           notSetCategoriesList: notSetCategoriesList,
           permissionedCategoriesList: permissionedCategoriesList,
           nonPermissionedCategoriesList: nonPermissionedCategoriesList,
@@ -272,7 +272,7 @@ const CUGProfile = () => {
       {
         name: "Stats",
         Props: {
-          CUGProfileStats: cugProfile?.CUGProfileStats,
+          Stats: cugProfile?.CUGProfileStats,
           nsStats: cugProfile?.CUGProfileStats,
           filteredStats: filteredStats,
           setFilteredStats: setFilteredStats,

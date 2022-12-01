@@ -1,9 +1,5 @@
-export interface IBaseProfileCategory {
-  id: string;
-  categoryId: string;
-  categoryName: string;
-  isPermissioned: boolean;
-  isActive: boolean;
+import { IBaseCategory } from "./BaseCategory";
+
+export interface IBaseProfileCategory extends IBaseCategory {
   baseProfileId: string;
-  isModified: boolean;
 }

@@ -1,9 +1,5 @@
-export interface ICUGProfileCategory {
-  id: string;
-  categoryId: string;
-  categoryName: string;
-  isPermissioned: boolean;
-  isActive: boolean;
+import { IBaseCategory } from "./BaseCategory";
+
+export interface ICUGProfileCategory extends IBaseCategory {
   cUGProfileId: string;
-  isModified: boolean;
 }

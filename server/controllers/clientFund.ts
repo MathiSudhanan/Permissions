@@ -10,6 +10,26 @@ export const getClientFunds = async (req: any, res: any) => {
   }
 };
 
+export const getClientFundsByCompanyId = async (req: any, res: any) => {
+  try {
+    const { companyId } = req.params;
+    const clientFunds = await prisma.clientFunds.findMany({
+      where: { companyId: companyId },
+    });
+
+    res.status(200).json(
+      clientFunds.map((x) => {
+        return {
+          id: x.id,
+          name: x.name,
+        };
+      })
+    );
+  } catch (error) {
+    res.status(404).json({ mesage: error });
+  }
+};
+
 export const getClientFundById = async (req: any, res: any) => {
   try {
     const { id } = req.params;

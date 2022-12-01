@@ -222,7 +222,7 @@ const BP = () => {
       {
         name: "Categories",
         Props: {
-          BaseProfileCategories: baseProfile?.BaseProfileCategories,
+          Categories: baseProfile?.BaseProfileCategories,
           notSetCategoriesList: notSetCategoriesList,
           permissionedCategoriesList: permissionedCategoriesList,
           nonPermissionedCategoriesList: nonPermissionedCategoriesList,
@@ -236,7 +236,7 @@ const BP = () => {
       {
         name: "Stats",
         Props: {
-          BaseProfileStats: baseProfile?.BaseProfileStats,
+          Stats: baseProfile?.BaseProfileStats,
           nsStats: baseProfile?.BaseProfileStats,
           filteredStats: filteredStats,
           setFilteredStats: setFilteredStats,

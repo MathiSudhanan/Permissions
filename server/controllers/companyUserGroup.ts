@@ -39,6 +39,27 @@ export const getCompanyUserGroupById = async (req: any, res: any) => {
   }
 };
 
+export const getUserGroupsByCompanyId = async (req: any, res: any) => {
+  try {
+    const { companyId } = req.params;
+    const companyUserGroups = await prisma.companyUserGroup.findMany({
+      where: { companyId: companyId },
+      include: {
+        UserGroup: true,
+      },
+    });
+    const userGroups = companyUserGroups.map((x) => {
+      return {
+        id: x.id,
+        name: x.name,
+      };
+    });
+    res.status(200).json(userGroups);
+  } catch (error) {
+    res.status(404).json({ mesage: error });
+  }
+};
+
 export const mapCompanyToUserGroup = async (req: any, res: any) => {
   let post = req.body;
   let companyUserGroup;
@@ -61,7 +82,7 @@ export const mapCompanyToUserGroup = async (req: any, res: any) => {
     delete post["userGroupId"];
 
     if (cUGAlreadyExists?.id) {
-      let error = { message: "User Group and company mapping already exists" };
+      let error = { message: " " };
       throw error;
     } else {
       const companyUserGroup = await prisma.companyUserGroup.create({

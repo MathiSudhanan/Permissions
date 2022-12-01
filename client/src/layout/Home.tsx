@@ -54,6 +54,15 @@ const Main = () => {
       ),
     },
     {
+      page: "User Group Mapping",
+      path: "/UserGroupMappingList",
+      iconTyp: (
+        <RecentActorsIcon
+          sx={{ fontSize: "5em", color: colors.blackPrimary }}
+        />
+      ),
+    },
+    {
       page: "Categories",
       path: "/categoryList",
       iconTyp: (
@@ -106,6 +115,33 @@ const Main = () => {
     {
       page: "HF Profile",
       path: "/HFProfileList",
+      iconTyp: (
+        <SupervisedUserCircleIcon
+          sx={{ fontSize: "5em", color: colors.blackPrimary }}
+        />
+      ),
+    },
+    {
+      page: "CFUG Profile",
+      path: "/CFUGProfileList",
+      iconTyp: (
+        <SupervisedUserCircleIcon
+          sx={{ fontSize: "5em", color: colors.blackPrimary }}
+        />
+      ),
+    },
+    {
+      page: "CFU Profile",
+      path: "/CFUProfileList",
+      iconTyp: (
+        <SupervisedUserCircleIcon
+          sx={{ fontSize: "5em", color: colors.blackPrimary }}
+        />
+      ),
+    },
+    {
+      page: "Final Permissions",
+      path: "/finalpermissions",
       iconTyp: (
         <SupervisedUserCircleIcon
           sx={{ fontSize: "5em", color: colors.blackPrimary }}

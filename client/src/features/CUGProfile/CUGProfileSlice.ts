@@ -71,6 +71,24 @@ export const getCUGProfileByIdAsync = createAsyncThunk<
   }
 });
 
+// export const getCompanyUserGroupsByCompanyIdAsync = createAsyncThunk<
+//   ICUGProfile,
+//   { companyId: string }
+// >(
+//   "cugProfile/getCUGProfilesByCompanyId",
+//   async ({ companyId }, thunkAPI: any) => {
+//     try {
+//       const companyUserGroups = await agent.CUGProfile.getByCompanyID(
+//         companyId
+//       );
+
+//       return companyUserGroups;
+//     } catch (error: any) {
+//       return thunkAPI.rejectWithValue({ error: error!.data });
+//     }
+//   }
+// );
+
 export const createCUGProfileAsync = createAsyncThunk<ICUGProfile, FieldValues>(
   "cugProfile/create",
   async (data: FieldValues, thunkAPI: any) => {
@@ -177,7 +195,10 @@ export const CUGProfileSlice = createSlice({
       }
     );
     builder.addMatcher(
-      isAnyOf(getCUGProfilesAsync.fulfilled),
+      isAnyOf(
+        getCUGProfilesAsync.fulfilled
+        // getCompanyUserGroupsByCompanyIdAsync.fulfilled
+      ),
       (state: CUGProfileState, action: any) => {
         state.cugProfileList = action.payload;
         state.status = "idle";

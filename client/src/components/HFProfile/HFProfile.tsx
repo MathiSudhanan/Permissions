@@ -64,7 +64,7 @@ const HedgeFundProfile = () => {
     []
   );
   const [permissionedStats, setPermissionedStats] = useState<
-    IHedgeFundProfileCategory[]
+    IHedgeFundProfileStat[]
   >([]);
   const [notSetCategoriesList, setNotSetCategoriesList] = useState<
     IHedgeFundProfileCategory[]
@@ -242,8 +242,7 @@ const HedgeFundProfile = () => {
       {
         name: "Categories",
         Props: {
-          HedgeFundProfileCategories:
-            hedgeFundProfile?.HedgeFundProfileCategories,
+          Categories: hedgeFundProfile?.HedgeFundProfileCategories,
           notSetCategoriesList: notSetCategoriesList,
           permissionedCategoriesList: permissionedCategoriesList,
           nonPermissionedCategoriesList: nonPermissionedCategoriesList,
@@ -257,7 +256,7 @@ const HedgeFundProfile = () => {
       {
         name: "Stats",
         Props: {
-          HedgeFundProfileStats: hedgeFundProfile?.HedgeFundProfileStats,
+          Stats: hedgeFundProfile?.HedgeFundProfileStats,
           nsStats: hedgeFundProfile?.HedgeFundProfileStats,
           filteredStats: filteredStats,
           setFilteredStats: setFilteredStats,

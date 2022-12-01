@@ -16,8 +16,7 @@ const FormTabPanelList = ({ tabData }: { tabData: any }) => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-
-  console.log("tabData", tabData);
+  console.log("tab Data", tabData);
   if (tabData.length) {
     return (
       <>
@@ -46,6 +45,7 @@ const FormTabPanelList = ({ tabData }: { tabData: any }) => {
           })}
         </Tabs>
         {tabData.map((x, index) => {
+          console.log("Properties", x.Props);
           return (
             <FormTabPanel
               value={tabValue}

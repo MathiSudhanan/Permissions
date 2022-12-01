@@ -44,6 +44,24 @@ export const getCompanyUserGroupByIdAsync = createAsyncThunk<
   }
 });
 
+export const getUserGroupsByCompanyIdAsync = createAsyncThunk<
+  ISelectModel,
+  { companyId: string }
+>(
+  "companyUserGroup/getCompanyUserGroupByCompanyId",
+  async ({ companyId }, thunkAPI: any) => {
+    try {
+      const companyUserGroups = await agent.CompanyUserGroup.getByCompanyId(
+        companyId
+      );
+
+      return companyUserGroups;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error!.data });
+    }
+  }
+);
+
 export const createCompanyUserGroupAsync = createAsyncThunk<
   ICompanyUserGroup,
   FieldValues
@@ -169,7 +187,10 @@ export const companyUserGroupSlice = createSlice({
       }
     );
     builder.addMatcher(
-      isAnyOf(getCompanyUserGroupAsync.fulfilled),
+      isAnyOf(
+        getCompanyUserGroupAsync.fulfilled,
+        getUserGroupsByCompanyIdAsync.fulfilled
+      ),
       (state: CompanyUserGroupState, action: any) => {
         state.companyUserGroupList = action.payload;
 

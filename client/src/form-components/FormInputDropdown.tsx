@@ -1,8 +1,8 @@
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { FormControl, MenuItem, TextField } from "@mui/material";
 import { Controller } from "react-hook-form";
-import { FormInputDropdownProps } from "./FormInputDropdownProps";
 import { ISelectModel } from "../models/Select";
+import { FormInputDropdownProps } from "./FormInputDropdownProps";
 
 export const FormInputDropdown: React.FC<FormInputDropdownProps> = ({
   name,
@@ -15,26 +15,50 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = ({
   const [ddlOptions, setDDLOptions] = useState<ISelectModel[]>([]);
 
   useEffect(() => {
-    setDDLOptions(options);
+    if (options.length) {
+      setDDLOptions(options);
+    } else {
+      setDDLOptions([{ id: "", name: "" }]);
+    }
   }, [options]);
 
   const generateSingleOptions = () => {
-    return ddlOptions.map((option: ISelectModel) => {
-      return (
-        <MenuItem key={option.id} value={option.id}>
-          {option.name}
-        </MenuItem>
-      );
-    });
+    if (ddlOptions.length) {
+      return ddlOptions.map((option: ISelectModel) => {
+        return (
+          <MenuItem key={option.id} value={option.id}>
+            {option.name}
+          </MenuItem>
+        );
+      });
+    }
   };
 
   return (
     <Controller
       render={({ field: { onChange, value } }) => (
         <FormControl size={"small"} fullWidth>
-          <TextField
-            select
-            fullWidth
+          {/* <TextField
+              select
+              fullWidth
+              value={value}
+              label={label}
+              onChange={(e) => {
+                onChange(e);
+                if (setValue) {
+                  setValue(e.target.value);
+                }
+                if (onHandleChange) {
+                  onHandleChange(e);
+                }
+              }}
+            >
+              {generateSingleOptions()}
+            </TextField> */}
+          <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
             value={value}
             label={label}
             onChange={(e) => {
@@ -42,10 +66,13 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = ({
               if (setValue) {
                 setValue(e.target.value);
               }
+              if (onHandleChange) {
+                onHandleChange(e);
+              }
             }}
           >
             {generateSingleOptions()}
-          </TextField>
+          </Select>
         </FormControl>
       )}
       control={control}

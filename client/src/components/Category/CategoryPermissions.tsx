@@ -8,8 +8,8 @@ import CategoryNotSet from "./CategoryNotSet";
 import CategoryPermissioned from "./CategoryPermissioned";
 
 interface ICategoryPermissionsProps {
-  control: any,
-  BaseProfileCategories: IBaseProfileCategory[];
+  control: any;
+  Categories: IBaseProfileCategory[];
   notSetCategoriesList: IBaseProfileCategory[];
   permissionedCategoriesList: IBaseProfileCategory[];
   nonPermissionedCategoriesList: IBaseProfileCategory[];
@@ -25,7 +25,7 @@ const CategoryPermissions = ({
   Props: ICategoryPermissionsProps;
 }) => {
   const {
-    BaseProfileCategories,
+    Categories,
     notSetCategoriesList,
     permissionedCategoriesList,
     nonPermissionedCategoriesList,
@@ -41,7 +41,13 @@ const CategoryPermissions = ({
         <Grid md={4} xs={12} item>
           <ListBoxSearch
             title="Non Permissioned"
-            nonFilteredList={[]}
+            nonFilteredList={
+              Categories
+                ? sortCategoryArray(
+                    Categories.filter((x) => x.isPermissioned === false)
+                  )
+                : []
+            }
             filteredList={nonPermissionedCategoriesList}
             setFilteredList={setNonPermissionedCategoriesList}
             ListBoxDataComponent={CategoryNonPermissioned}
@@ -51,7 +57,13 @@ const CategoryPermissions = ({
         <Grid md={4} xs={12} item>
           <ListBoxSearch
             title="Not Assigned"
-            nonFilteredList={BaseProfileCategories}
+            nonFilteredList={
+              Categories
+                ? sortCategoryArray(
+                    Categories.filter((x) => x.isPermissioned === null)
+                  )
+                : []
+            }
             filteredList={notSetCategoriesList}
             setFilteredList={setNotSetCategoriesList}
             ListBoxDataComponent={CategoryNotSet}
@@ -61,7 +73,13 @@ const CategoryPermissions = ({
         <Grid md={4} xs={12} item>
           <ListBoxSearch
             title="Permissioned"
-            nonFilteredList={[]}
+            nonFilteredList={
+              Categories
+                ? sortCategoryArray(
+                    Categories.filter((x) => x.isPermissioned === true)
+                  )
+                : []
+            }
             filteredList={permissionedCategoriesList}
             setFilteredList={setPermissionedCategoriesList}
             ListBoxDataComponent={CategoryPermissioned}

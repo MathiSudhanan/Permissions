@@ -1,10 +1,5 @@
-export interface IHedgeFundProfileCategory {
-    id: string;
-    categoryId: string;
-    categoryName: string;
-    isPermissioned: boolean;
-    isActive: boolean;
-    baseProfileId: string;
-    isModified: boolean;
-  }
-  
+import { IBaseCategory } from "./BaseCategory";
+
+export interface IHedgeFundProfileCategory extends IBaseCategory {
+  baseProfileId: string;
+}

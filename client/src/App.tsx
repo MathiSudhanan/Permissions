@@ -21,6 +21,10 @@ import CompanyList from "./components/Company/CompanyList";
 import Company from "./components/Company/Company";
 import UserGroup from "./components/UserGroup/UserGroup";
 import UserGroupList from "./components/UserGroup/UserGroupList";
+
+import UserGroupMappingList from "./components/UserGroupMapping/UserGroupMappingList";
+import UserGroupMapping from "./components/UserGroupMapping/UserGroupMapping";
+
 import ClientFundList from "./components/ClientFund/ClientFundList";
 import FundList from "./components/Fund/FundList";
 import Fund from "./components/Fund/Fund";
@@ -35,6 +39,12 @@ import CompanyUserGroup from "./components/CompanyUserGroup/CompanyUserGroup";
 import CompanyUserGroupList from "./components/CompanyUserGroup/CompanyUserGroupList";
 import HedgeFundProfileList from "./components/HFProfile/HFProfileList";
 import HedgeFundProfile from "./components/HFProfile/HFProfile";
+import CFUGProfile from "./components/CFUGProfile/CFUGProfile";
+import CFUGProfileList from "./components/CFUGProfile/CFUGProfileList";
+
+import CFUProfile from "./components/CFUProfile/CFUProfile";
+import CFUProfileList from "./components/CFUProfile/CFUProfileList";
+import FinalPermissions from "./components/FinalPermissions/FinalPermissions";
 
 const App = () => {
   const anonymousAuthPages = ["/login", "/signup", "/forgotPassword"];
@@ -226,6 +236,31 @@ const App = () => {
               }
             />
             <Route
+              path="/UserGroupMappingList"
+              element={
+                <PrivateRoute>
+                  <UserGroupMappingList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/UserGroupMapping"
+              element={
+                <PrivateRoute>
+                  <UserGroupMapping />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/UserGroupMapping/:id/:companyId"
+              element={
+                <PrivateRoute>
+                  <UserGroupMapping />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
               path="/ClientFundList"
               element={
                 <PrivateRoute>
@@ -344,6 +379,65 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <HedgeFundProfile />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/CFUGProfileList"
+              element={
+                <PrivateRoute>
+                  <CFUGProfileList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/CFUGProfile"
+              element={
+                <PrivateRoute>
+                  <CFUGProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/CFUGProfile/:id"
+              element={
+                <PrivateRoute>
+                  <CFUGProfile />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/CFUProfileList"
+              element={
+                <PrivateRoute>
+                  <CFUProfileList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/CFUProfile"
+              element={
+                <PrivateRoute>
+                  <CFUProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/CFUProfile/:id"
+              element={
+                <PrivateRoute>
+                  <CFUProfile />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/finalPermissions"
+              element={
+                <PrivateRoute>
+                  <FinalPermissions />
                 </PrivateRoute>
               }
             />

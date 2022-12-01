@@ -1,9 +1,5 @@
-export interface IHedgeFundProfileStat {
-    id: string;
-    statId: string;
-    statName: string;
-    isPermissioned: boolean;
-    isActive: boolean;
-    baseProfileId: string;
-    isModified: boolean;
-  }
+import { IBaseStat } from "./BaseStat";
+
+export interface IHedgeFundProfileStat extends IBaseStat {
+  baseProfileId: string;
+}
