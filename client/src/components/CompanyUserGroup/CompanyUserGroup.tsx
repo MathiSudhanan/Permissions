@@ -62,7 +62,6 @@ const CompanyUserGroup = () => {
   useEffect(() => {
     if (!isAddMode) {
       agent.CompanyUserGroup.getById(id).then((cf) => {
-        console.log("CUG", cf);
         const fields = [
           "name",
           "description",

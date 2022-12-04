@@ -27,6 +27,7 @@ import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { colors, theme } from "../../styles/theme/Theme";
 import { sortCategoryArray, sortStatArray } from "../../Utils/arrayUtils";
 import CategoryFinalPermissions from "../Category/CategoryFinalPermissions";
+import StatFP from "../Stat/StatFP";
 import StatPermissions from "../Stat/StatPermissions";
 
 const FinalPermissions = () => {
@@ -70,6 +71,9 @@ const FinalPermissions = () => {
     setCompanyId("");
     setClientFundId("");
     setUserId("");
+    return () => {
+      dispatch(clearFinalPermissions());
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -82,20 +86,10 @@ const FinalPermissions = () => {
   useEffect(() => {
     if (clientFundId && userId) {
       dispatch(getFinalPermissionsAsync({ clientFundId, userId }));
-    } else if (!clientFundId && !userId) {
-      dispatch(
-        // getFinalPermissionsAsync({
-        //   clientFundId: defaultIdValue,
-        //   userId: defaultIdValue,
-        // })
-        clearFinalPermissions()
-      );
     }
   }, [clientFundId, dispatch, userId]);
 
   useEffect(() => {
-    console.log("FinalPermissions", finalPermissions);
-
     if (finalPermissions) {
       if (finalPermissions.FinalPermissionsStats?.length) {
         let pStatList = sortStatArray([
@@ -130,7 +124,7 @@ const FinalPermissions = () => {
           setFilteredStats: setFilteredStats,
         },
 
-        component: StatPermissions,
+        component: StatFP,
       },
     ]);
   }, [

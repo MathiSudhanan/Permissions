@@ -134,7 +134,6 @@ export const userSlice = createSlice({
     builder.addCase(
       createUserAsync.pending,
       (state: UserState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -142,7 +141,6 @@ export const userSlice = createSlice({
     builder.addCase(
       modifyUserAsync.pending,
       (state: UserState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -159,7 +157,6 @@ export const userSlice = createSlice({
       deleteUserAsync.rejected,
       (state: UserState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -173,7 +170,6 @@ export const userSlice = createSlice({
       isAnyOf(createUserAsync.rejected, getUserByIdAsync.rejected),
       (state: UserState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -196,7 +192,6 @@ export const userSlice = createSlice({
       isAnyOf(getUsersAsync.rejected),
       (state: UserState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -225,7 +220,6 @@ export const userSlice = createSlice({
       ),
       (state: UserState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

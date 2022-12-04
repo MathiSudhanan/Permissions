@@ -146,7 +146,10 @@ export const getOverridenStatsFP = (stage2stat: any, stage1Stat: any) => {
           statName: hfpStat.statName,
           isPermissioned: hfpStat.isPermissioned,
           isActive: true,
-          chipData: hfpStat.chipData,
+          chipData:
+            hfpStat.chipData.length > 0
+              ? [...x.chipData, ...hfpStat.chipData]
+              : [...x.chipData],
         };
       } else {
         return {
@@ -155,7 +158,8 @@ export const getOverridenStatsFP = (stage2stat: any, stage1Stat: any) => {
           statName: x.statName,
           isPermissioned: x.isPermissioned,
           isActive: true,
-          chipData: x.chipData,
+          // chipData: x.chipData,
+          chipData: [...x.chipData],
         };
       }
     });
@@ -199,7 +203,11 @@ export const getMostRestrictiveStatsFP = (stage2stat: any, stage1Stat: any) => {
           statName: hfpStat.statName,
           isPermissioned: hfpStat.isPermissioned,
           isActive: true,
-          chipData: hfpStat.chipData,
+
+          chipData:
+            hfpStat.chipData.length > 0
+              ? [...x.chipData, ...hfpStat.chipData]
+              : [...x.chipData],
         };
       } else {
         return {
@@ -208,7 +216,8 @@ export const getMostRestrictiveStatsFP = (stage2stat: any, stage1Stat: any) => {
           statName: x.statName,
           isPermissioned: x.isPermissioned,
           isActive: true,
-          chipData: x.chipData,
+
+          chipData: [...x.chipData],
         };
       }
     });
@@ -248,16 +257,43 @@ export const getCompleteStatDetailsFP = (profileStat: any, level: number) => {
         statName: x.Stat.name,
         isPermissioned: x.isPermissioned,
         isActive: true,
-        chipData: [
-          {
-            bp: level === 1 ? x.isPermissioned : null,
-            cugp: level === 2 ? x.isPermissioned : null,
-            hfp: level === 3 ? x.isPermissioned : null,
-            cfugp: level === 4 ? x.isPermissioned : null,
-            cfup: level === 5 ? x.isPermissioned : null,
-          },
-        ],
+        chipData: [getChipLevelData(level, x.isPermissioned)],
       };
     });
+  }
+};
+
+const getChipLevelData = (level: number, isPermissioned: boolean) => {
+  let chipData = {};
+  switch (level) {
+    case 1:
+      return {
+        name: "bp",
+        value: isPermissioned,
+      };
+
+    case 2:
+      return {
+        name: "cugp",
+        value: isPermissioned,
+      };
+
+    case 3:
+      return {
+        name: "hfp",
+        value: isPermissioned,
+      };
+
+    case 4:
+      return {
+        name: "cfugp",
+        value: isPermissioned,
+      };
+
+    case 5:
+      return {
+        name: "cfup",
+        value: isPermissioned,
+      };
   }
 };

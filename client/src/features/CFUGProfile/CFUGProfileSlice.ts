@@ -124,10 +124,10 @@ export const cfugProfileSlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setCategory: (state, action) => {
+    setCFUGProfile: (state, action) => {
       state.cfugProfile = action.payload;
     },
-    clearCategory: (state) => {
+    clearCFUGProfile: (state) => {
       state.cfugProfile = null;
     },
     setBPNameIdList: (state, action) => {
@@ -149,7 +149,6 @@ export const cfugProfileSlice = createSlice({
     builder.addCase(
       createCFUGProfileAsync.pending,
       (state: CFUGProfileState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -157,7 +156,6 @@ export const cfugProfileSlice = createSlice({
     builder.addCase(
       modifyCFUGProfileAsync.pending,
       (state: CFUGProfileState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -174,7 +172,6 @@ export const cfugProfileSlice = createSlice({
       deleteCFUGProfileAsync.rejected,
       (state: CFUGProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -198,7 +195,6 @@ export const cfugProfileSlice = createSlice({
       ),
       (state: CFUGProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -221,8 +217,9 @@ export const cfugProfileSlice = createSlice({
       isAnyOf(getCFUGProfilesAsync.rejected),
       (state: CFUGProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },
 });
+
+export const { setCFUGProfile, clearCFUGProfile } = cfugProfileSlice.actions;

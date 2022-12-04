@@ -104,10 +104,10 @@ export const baseProfileSlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setCategory: (state, action) => {
+    setBaseProfile: (state, action) => {
       state.baseProfile = action.payload;
     },
-    clearCategory: (state) => {
+    clearBaseProfile: (state) => {
       state.baseProfile = null;
     },
     setBPNameIdList: (state, action) => {
@@ -129,7 +129,6 @@ export const baseProfileSlice = createSlice({
     builder.addCase(
       createBaseProfileAsync.pending,
       (state: BaseProfileState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -137,7 +136,6 @@ export const baseProfileSlice = createSlice({
     builder.addCase(
       modifyBaseProfileAsync.pending,
       (state: BaseProfileState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -154,7 +152,6 @@ export const baseProfileSlice = createSlice({
       deleteBaseProfileAsync.rejected,
       (state: BaseProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -178,7 +175,6 @@ export const baseProfileSlice = createSlice({
       ),
       (state: BaseProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -201,8 +197,9 @@ export const baseProfileSlice = createSlice({
       isAnyOf(getBaseProfilesAsync.rejected),
       (state: BaseProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },
 });
+
+export const { setBaseProfile, clearBaseProfile } = baseProfileSlice.actions;

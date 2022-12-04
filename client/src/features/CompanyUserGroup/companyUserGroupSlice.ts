@@ -139,7 +139,6 @@ export const companyUserGroupSlice = createSlice({
     builder.addCase(
       createCompanyUserGroupAsync.pending,
       (state: CompanyUserGroupState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -147,7 +146,6 @@ export const companyUserGroupSlice = createSlice({
     builder.addCase(
       modifyCompanyUserGroupAsync.pending,
       (state: CompanyUserGroupState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -163,7 +161,6 @@ export const companyUserGroupSlice = createSlice({
       deleteCompanyUserGroupAsync.rejected,
       (state: CompanyUserGroupState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -183,7 +180,6 @@ export const companyUserGroupSlice = createSlice({
       ),
       (state: CompanyUserGroupState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -210,7 +206,6 @@ export const companyUserGroupSlice = createSlice({
       isAnyOf(getCompanyUserGroupAsync.rejected),
       (state: CompanyUserGroupState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

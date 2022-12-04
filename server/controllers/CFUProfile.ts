@@ -62,12 +62,6 @@ export const getNewCFUAndOtherProfiles = async (req: any, res: any) => {
         },
       },
     });
-    let cfugProfileStats = getCompleteStatDetails(
-      cfugProfile?.ClientFundUserGroupProfileStats
-    );
-    let cfugProfileCategories = getCompleteCatgoryDetails(
-      cfugProfile?.ClientFundUserGroupProfileCategories
-    );
 
     const clientFund = await prisma.clientFunds.findUnique({
       where: {
@@ -75,7 +69,7 @@ export const getNewCFUAndOtherProfiles = async (req: any, res: any) => {
       },
     });
 
-    const hfProfile = await prisma.hedgeFundProfile.findFirst({
+    let hfProfile = await prisma.hedgeFundProfile.findFirst({
       where: { fundId: clientFund?.fundId },
       include: {
         HedgeFundProfileCategories: {
@@ -151,6 +145,8 @@ export const getNewCFUAndOtherProfiles = async (req: any, res: any) => {
     if (cugProfile) {
       if (cugProfile.CUGProfileStats) {
         cugProfileStats = getOverridenStats(cugProfileStats, baseProfileStats);
+      } else {
+        cugProfileStats = baseProfileStats;
       }
 
       if (cugProfile.CUGProfileCategories) {
@@ -158,36 +154,74 @@ export const getNewCFUAndOtherProfiles = async (req: any, res: any) => {
           cugProfileCategories,
           baseProfileCategories
         );
+      } else {
+        cugProfileCategories = baseProfileCategories;
       }
     }
 
     if (hfProfile) {
-      if (hfProfile.HedgeFundProfileStats) {
+      if (
+        hfProfile.HedgeFundProfileStats &&
+        hfProfile.HedgeFundProfileStats.length
+      ) {
         hfProfileStats = getMostRestrictiveStats(
           hfProfileStats,
           cugProfileStats
         );
+      } else {
+        hfProfileStats = cugProfileStats;
       }
 
-      if (hfProfile.HedgeFundProfileCategories) {
+      if (
+        hfProfile.HedgeFundProfileCategories &&
+        hfProfile.HedgeFundProfileCategories.length
+      ) {
         hfProfileCategories = getMostRestrictiveCategories(
           hfProfileCategories,
           cugProfileCategories
         );
+      } else {
+        hfProfileCategories = cugProfileCategories;
       }
+    } else {
+      hfProfileCategories = cugProfileCategories;
+      hfProfileStats = cugProfileStats;
     }
 
+    let cfugProfileStats = [];
+    let cfugProfileCategories = [];
+
     if (cfugProfile) {
-      if (cfugProfile.ClientFundUserGroupProfileStats) {
+      cfugProfileStats = getCompleteStatDetails(
+        cfugProfile?.ClientFundUserGroupProfileStats
+      );
+      cfugProfileCategories = getCompleteCatgoryDetails(
+        cfugProfile?.ClientFundUserGroupProfileCategories
+      );
+
+      if (
+        cfugProfile.ClientFundUserGroupProfileStats &&
+        cfugProfile.ClientFundUserGroupProfileStats.length
+      ) {
         cfugProfileStats = getOverridenStats(cfugProfileStats, hfProfileStats);
+      } else {
+        cfugProfileStats = hfProfileStats;
       }
 
-      if (cfugProfile.ClientFundUserGroupProfileCategories) {
+      if (
+        cfugProfile.ClientFundUserGroupProfileCategories &&
+        cfugProfile.ClientFundUserGroupProfileCategories.length
+      ) {
         cfugProfileCategories = getOverridenCategories(
           cfugProfileCategories,
           hfProfileCategories
         );
+      } else {
+        cfugProfileCategories = hfProfileCategories;
       }
+    } else if (hfProfileCategories.length && hfProfileStats.length) {
+      cfugProfileCategories = hfProfileCategories;
+      cfugProfileStats = hfProfileStats;
     }
 
     const stats = await prisma.stats.findMany();
@@ -218,7 +252,6 @@ export const getNewCFUAndOtherProfiles = async (req: any, res: any) => {
 
 export const getCFUProfileById = async (req: any, res: any) => {
   try {
-    console.log(req.params);
     const { id } = req.params;
 
     const cfuProfile = await prisma.clientFundUserProfile.findUnique({
@@ -421,8 +454,6 @@ export const getCFUProfileById = async (req: any, res: any) => {
     delete cfuPro["ClientFundUserProfileCategories"];
     delete cfuPro["ClientFundUserProfileStats"];
 
-    console.log(cfuPro.ClientFundUserProfileStats);
-
     if (cfuProfileCategories) {
       cfuPro["CFUProfileCategories"] = getMissedOutCategories(
         cfuProfileCategories,
@@ -434,7 +465,6 @@ export const getCFUProfileById = async (req: any, res: any) => {
       cfuPro["CFUProfileStats"] = getMissedOutStats(cfuProfileStats, stats);
     }
 
-    console.log("final", cfuPro.CFUProfileStats);
     res.status(200).json(cfuPro);
   } catch (error) {
     res.status(404).json({ mesage: error });
@@ -445,7 +475,6 @@ export const createCFUProfile = async (req: any, res: any) => {
   let post = req.body;
   let CFUProfile;
   const loggedInUserId = req.headers["userId"];
-  console.log(post);
 
   try {
     post.CreatedBy = { connect: { id: loggedInUserId } };
@@ -514,7 +543,6 @@ export const createCFUProfile = async (req: any, res: any) => {
       };
     }
 
-    console.log(CFUData);
     CFUProfile = await prisma.clientFundUserProfile.create({
       data: CFUData,
     });

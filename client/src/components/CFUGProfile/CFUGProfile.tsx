@@ -29,6 +29,7 @@ import { ICFUGProfileCategory } from "../../models/CFUGProfileCategory";
 import { ICFUGProfile } from "../../models/CFUGProfile";
 import { getClientFundsAsync } from "../../features/ClientFund/clientFundSlice";
 import {
+  clearCFUGProfile,
   getCFUGProfileByIdAsync,
   getNewCFUGAndOtherProfilesAsync,
 } from "../../features/CFUGProfile/CFUGProfileSlice";
@@ -111,6 +112,9 @@ const CFUGProfile = () => {
     if (!isAddMode) {
       dispatch(getCFUGProfileByIdAsync({ id }));
     }
+    return () => {
+      clearCFUGProfile();
+    };
   }, [id, isAddMode, dispatch]);
 
   useEffect(() => {
@@ -289,7 +293,6 @@ const CFUGProfile = () => {
 
   useEffect(() => {
     if (companyId) {
-      console.log(companyId);
       dispatch(getUserGroupsByCompanyIdAsync({ companyId }));
       dispatch(getClientFundsByCompanyIdAsync({ companyId }));
     }
@@ -322,7 +325,6 @@ const CFUGProfile = () => {
     data.CFUGProfileStats = [
       ...filteredStats.filter((x) => x.isModified && x.isPermissioned !== null),
     ];
-    console.log("Submit Data", data);
 
     return isAddMode
       ? createHedgeFundProfileAsync(data)
@@ -332,7 +334,7 @@ const CFUGProfile = () => {
   const createHedgeFundProfileAsync = async (data: ICFUGProfile) => {
     try {
       const cfugProfileData = { ...data };
-      console.log("Create", data);
+
       cfugProfileData.CFUGPCategories = [];
       cfugProfileData.CFUGPStats = [];
 
@@ -359,7 +361,6 @@ const CFUGProfile = () => {
       delete cfugProfileData["CFUGProfileStats"];
       delete cfugProfileData["CFUGProfileCategories"];
 
-      console.log("success:", cfugProfileData);
       await agent.CFUGProfile.create(cfugProfileData);
       toast.info("Client Fund User Group Profile Saved");
       navigate("/CFUGProfileList");
@@ -399,8 +400,6 @@ const CFUGProfile = () => {
         });
       }
     });
-    console.log("Client Fund User Group Profile Data", cfugProfileData);
-    console.log("Client Fund User Group Profile", filteredStats);
 
     try {
       await agent.CFUGProfile.modify(id, cfugProfileData);
@@ -410,8 +409,6 @@ const CFUGProfile = () => {
       toast.error(error?.error?.error);
     }
   };
-
-  console.log("cfugProfile", cfugProfile);
 
   return (
     <Card

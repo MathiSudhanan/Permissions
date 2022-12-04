@@ -118,7 +118,6 @@ export const categorySlice = createSlice({
     builder.addCase(
       createCategoryAsync.pending,
       (state: CategoryState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -126,7 +125,6 @@ export const categorySlice = createSlice({
     builder.addCase(
       modifyCategoryAsync.pending,
       (state: CategoryState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -143,7 +141,6 @@ export const categorySlice = createSlice({
       deleteCategoryAsync.rejected,
       (state: CategoryState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -157,7 +154,6 @@ export const categorySlice = createSlice({
       isAnyOf(createCategoryAsync.rejected, getCategoryByIdAsync.rejected),
       (state: CategoryState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -181,7 +177,6 @@ export const categorySlice = createSlice({
       isAnyOf(getCategoriesAsync.rejected),
       (state: CategoryState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

@@ -32,7 +32,7 @@ export const getUserGroupAsync = createAsyncThunk<IUserGroup[]>(
 );
 
 export const getUserGroupByIdAsync = createAsyncThunk<
-IUserGroup,
+  IUserGroup,
   { id: string }
 >("userGroup/getUserGroupById", async ({ id }, thunkAPI: any) => {
   try {
@@ -58,7 +58,7 @@ export const createUserGroupAsync = createAsyncThunk<IUserGroup, FieldValues>(
 );
 
 export const modifyUserGroupAsync = createAsyncThunk<
-IUserGroup,
+  IUserGroup,
   { id: string; values: any }
 >("userGroup/getUserGroupById", async ({ id, values }, thunkAPI: any) => {
   try {
@@ -70,18 +70,18 @@ IUserGroup,
   }
 });
 
-export const deleteUserGroupAsync = createAsyncThunk<IUserGroup, { id: string }>(
-  "userGroup/deleteUserGroup",
-  async ({ id }, thunkAPI: any) => {
-    try {
-      const userGroup = await agent.UserGroup.delete(id);
+export const deleteUserGroupAsync = createAsyncThunk<
+  IUserGroup,
+  { id: string }
+>("userGroup/deleteUserGroup", async ({ id }, thunkAPI: any) => {
+  try {
+    const userGroup = await agent.UserGroup.delete(id);
 
-      return userGroup;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error!.data });
-    }
+    return userGroup;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({ error: error!.data });
   }
-);
+});
 
 export const userGroupSlice = createSlice({
   name: "userGroup",
@@ -118,7 +118,6 @@ export const userGroupSlice = createSlice({
     builder.addCase(
       createUserGroupAsync.pending,
       (state: UserGroupState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -126,7 +125,6 @@ export const userGroupSlice = createSlice({
     builder.addCase(
       modifyUserGroupAsync.pending,
       (state: UserGroupState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -143,7 +141,6 @@ export const userGroupSlice = createSlice({
       deleteUserGroupAsync.rejected,
       (state: UserGroupState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -157,7 +154,6 @@ export const userGroupSlice = createSlice({
       isAnyOf(createUserGroupAsync.rejected, getUserGroupByIdAsync.rejected),
       (state: UserGroupState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -180,7 +176,6 @@ export const userGroupSlice = createSlice({
       isAnyOf(getUserGroupAsync.rejected),
       (state: UserGroupState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

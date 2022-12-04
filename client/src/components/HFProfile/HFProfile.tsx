@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
+  clearHFProfile,
   getHedgeFundProfileByIdAsync,
   getHedgeFundProfileNewAsync,
 } from "../../features/HFProfile/hedgeFundProfileSlice";
@@ -98,6 +99,9 @@ const HedgeFundProfile = () => {
     } else {
       dispatch(getHedgeFundProfileByIdAsync({ id }));
     }
+    return () => {
+      clearHFProfile();
+    };
   }, [id, isAddMode, dispatch]);
 
   useEffect(() => {
@@ -296,7 +300,6 @@ const HedgeFundProfile = () => {
     data.HedgeFundProfileStats = [
       ...filteredStats.filter((x) => x.isModified && x.isPermissioned !== null),
     ];
-    console.log("Submit Data", data);
 
     return isAddMode
       ? createHedgeFundProfileAsync(data)
@@ -306,7 +309,7 @@ const HedgeFundProfile = () => {
   const createHedgeFundProfileAsync = async (data: IHedgeFundProfile) => {
     try {
       const hedgeFundProfileData = { ...data };
-      console.log("Create", data);
+
       hedgeFundProfileData.HFPCategories = [];
       hedgeFundProfileData.HFPStats = [];
 
@@ -333,7 +336,6 @@ const HedgeFundProfile = () => {
       delete hedgeFundProfileData["HedgeFundProfileStats"];
       delete hedgeFundProfileData["HedgeFundProfileCategories"];
 
-      console.log("success:", hedgeFundProfileData);
       await agent.HFProfile.create(hedgeFundProfileData);
       toast.info("Hedge Fund Profile Saved");
       navigate("/HFProfileList");
@@ -373,8 +375,6 @@ const HedgeFundProfile = () => {
         });
       }
     });
-    console.log("Hedge Fund Profile Data", hedgeFundProfileData);
-    console.log("Hedge Fund Profile", filteredStats);
 
     try {
       await agent.HFProfile.modify(id, hedgeFundProfileData);
@@ -385,7 +385,6 @@ const HedgeFundProfile = () => {
     }
   };
 
-  console.log("hedgeFundProfile", hedgeFundProfile);
   return (
     <Card
       component="form"

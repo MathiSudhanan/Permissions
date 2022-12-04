@@ -67,7 +67,6 @@ export const getMostRestrictiveCategories = (
   stage2Cat: any,
   stage1Cat: any
 ) => {
-  // console.log("cugAll", stage1Cat);
   let result: any = [];
 
   if (stage1Cat) {
@@ -75,7 +74,7 @@ export const getMostRestrictiveCategories = (
       const cat = stage2Cat?.find(
         (x: any) => st1Cat.categoryId === x.categoryId
       );
-      // console.log("cug", st1Cat);
+
       if (cat && st1Cat.isPermissioned) {
         return {
           id: cat.id,
@@ -85,8 +84,6 @@ export const getMostRestrictiveCategories = (
           isActive: true,
         };
       } else {
-        // console.log("hf", stage1Cat);
-
         return {
           id: st1Cat.id,
           categoryId: st1Cat.categoryId,
@@ -161,10 +158,6 @@ export const getOverridenCategoriesFP = (
         (x: any) => st1Cat.categoryId === x.categoryId
       );
       if (cat) {
-        // console.log(
-        //   `chipData: ${[...cat.chipData]} Category: ${st1Cat.categoryName}`
-        // );
-
         return {
           id: cat.id,
           categoryId: cat.categoryId,
@@ -219,7 +212,6 @@ export const getMostRestrictiveCategoriesFP = (
   stage1Cat: any,
   level: number
 ) => {
-  // console.log("cugAll", stage1Cat);
   let result: any = [];
 
   if (stage1Cat) {
@@ -227,7 +219,7 @@ export const getMostRestrictiveCategoriesFP = (
       const cat = stage2Cat?.find(
         (x: any) => st1Cat.categoryId === x.categoryId
       );
-      // console.log("cug", st1Cat);
+
       if (cat && st1Cat.isPermissioned) {
         return {
           id: cat.id,
@@ -242,8 +234,6 @@ export const getMostRestrictiveCategoriesFP = (
               : [...cat.chipData],
         };
       } else {
-        // console.log("hf", stage1Cat);
-
         return {
           id: st1Cat.id,
           categoryId: st1Cat.categoryId,

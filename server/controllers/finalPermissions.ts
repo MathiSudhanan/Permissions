@@ -256,8 +256,6 @@ export const getFinalPermissions = async (req: any, res: any) => {
         FinalPermissionsStats: cfuProfileStats,
       };
 
-      console.log("fp", finalPermissions);
-
       res.status(200).json(finalPermissions);
     } else {
       const finalPermissions = {

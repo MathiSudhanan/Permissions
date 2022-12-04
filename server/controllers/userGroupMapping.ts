@@ -1,8 +1,6 @@
 import prisma from "../lib/prisma";
 
 export const getAllUserGroups = async (req: any, res: any) => {
-  console.log("user group mapping reached");
-
   try {
     const userGroupMappings = await prisma.userGroupMapping.findMany({
       include: {
@@ -41,7 +39,6 @@ export const getAllUserGroups = async (req: any, res: any) => {
         };
       }
     });
-    console.log("user group mapping", UGMappings);
 
     res.status(200).json(UGMappings);
   } catch (error) {
@@ -63,7 +60,6 @@ export const getUserGroupById = async (req: any, res: any) => {
         UserGroup: true,
       },
     });
-    console.log("user group mapping", userGroupMappings);
 
     res.status(200).json(userGroupMappings);
   } catch (error) {
@@ -74,7 +70,7 @@ export const getUserGroupById = async (req: any, res: any) => {
 export const getUsersByUserGroupId = async (req: any, res: any) => {
   try {
     const { userGroupId } = req.params;
-    console.log("user group Id", userGroupId);
+
     const compUserGroup = await prisma.companyUserGroup.findUnique({
       where: {
         id: userGroupId,
@@ -92,7 +88,6 @@ export const getUsersByUserGroupId = async (req: any, res: any) => {
           User: true,
         },
       });
-      console.log("user group mapping", userGroupMappings);
 
       res.status(200).json(
         userGroupMappings.map((x) => {

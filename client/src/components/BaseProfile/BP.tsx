@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
+  clearBaseProfile,
   getBaseProfileByIdAsync,
   getBaseProfileNewAsync,
 } from "../../features/BaseProfile/baseProfileSlice";
@@ -87,6 +88,12 @@ const BP = () => {
       dispatch(getBaseProfileByIdAsync({ id }));
     }
   }, [id, isAddMode, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearBaseProfile());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (baseProfile) {
@@ -276,7 +283,6 @@ const BP = () => {
     data.BaseProfileStats = [
       ...filteredStats.filter((x) => x.isModified && x.isPermissioned !== null),
     ];
-    console.log("Submit Data", data);
 
     return isAddMode
       ? createBaseProfileAsync(data)
@@ -286,7 +292,7 @@ const BP = () => {
   const createBaseProfileAsync = async (data: IBaseProfile) => {
     try {
       const baseProfileData = { ...data };
-      console.log("Create", data);
+
       baseProfileData.BPCategories = [];
       baseProfileData.BPStats = [];
 
@@ -313,7 +319,6 @@ const BP = () => {
       delete baseProfileData["BaseProfileStats"];
       delete baseProfileData["BaseProfileCategories"];
 
-      console.log("success:", baseProfileData);
       await agent.BaseProfile.create(baseProfileData);
       toast.info("Base Profile Saved");
       navigate("/BaseProfileList");
@@ -351,8 +356,6 @@ const BP = () => {
         });
       }
     });
-    console.log("Base Profile Data", baseProfileData);
-    console.log("Base Profile", filteredStats);
 
     try {
       await agent.BaseProfile.modify(id, baseProfileData);

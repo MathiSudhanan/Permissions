@@ -25,8 +25,6 @@ const UserGroupMappingList = () => {
     dispatch(getUserGroupMappingAsync());
   }, [dispatch]);
 
-  console.log("UGM", userGroupMappingList);
-
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90, hideable: true },
     {
@@ -100,7 +98,6 @@ const UserGroupMappingList = () => {
           columns={columns}
           visibleFields={VISIBLE_FIELDS}
           onRowDoubelClick={(row) => {
-            console.log(row.row);
             const navURL = generatePath(
               `/UserGroupMapping/${row.row.id}/${row.row.companyId}`
             );

@@ -33,7 +33,7 @@ const CategoryFinalPermissions = ({
     let filtered = dataArray.filter((x) =>
       x.categoryName.toLowerCase().startsWith(event.target.value.toLowerCase())
     );
-    console.log("Filtered", filtered);
+
     setDataArrayValue(filtered);
   };
 

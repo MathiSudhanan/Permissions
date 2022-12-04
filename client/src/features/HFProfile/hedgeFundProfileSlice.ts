@@ -104,10 +104,10 @@ export const hedgeFundProfileSlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setCategory: (state, action) => {
+    setHFProfile: (state, action) => {
       state.hedgeFundProfile = action.payload;
     },
-    clearCategory: (state) => {
+    clearHFProfile: (state) => {
       state.hedgeFundProfile = null;
     },
     setBPNameIdList: (state, action) => {
@@ -129,7 +129,6 @@ export const hedgeFundProfileSlice = createSlice({
     builder.addCase(
       createHedgeFundProfileAsync.pending,
       (state: HedgeFundProfileState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -137,7 +136,6 @@ export const hedgeFundProfileSlice = createSlice({
     builder.addCase(
       modifyHedgeFundProfileAsync.pending,
       (state: HedgeFundProfileState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -154,7 +152,6 @@ export const hedgeFundProfileSlice = createSlice({
       deleteHedgeFundProfileAsync.rejected,
       (state: HedgeFundProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -178,7 +175,6 @@ export const hedgeFundProfileSlice = createSlice({
       ),
       (state: HedgeFundProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -201,8 +197,9 @@ export const hedgeFundProfileSlice = createSlice({
       isAnyOf(getHedgeFundProfilesAsync.rejected),
       (state: HedgeFundProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },
 });
+
+export const { setHFProfile, clearHFProfile } = hedgeFundProfileSlice.actions;

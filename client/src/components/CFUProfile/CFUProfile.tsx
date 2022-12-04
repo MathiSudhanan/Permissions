@@ -26,6 +26,7 @@ import { ICFUProfileStat } from "../../models/CFUProfileStat";
 import { ICFUProfileCategory } from "../../models/CFUProfileCategory";
 import { ICFUProfile } from "../../models/CFUProfile";
 import {
+  clearCFUProfile,
   getCFUProfileByIdAsync,
   getNewCFUAndOtherProfilesAsync,
 } from "../../features/CFUProfile/CFUProfileSlice";
@@ -112,6 +113,9 @@ const CFUProfile = () => {
     if (!isAddMode) {
       dispatch(getCFUProfileByIdAsync({ id }));
     }
+    return () => {
+      clearCFUProfile();
+    };
   }, [id, isAddMode, dispatch]);
 
   useEffect(() => {
@@ -129,7 +133,7 @@ const CFUProfile = () => {
 
   useEffect(() => {
     if (cfuProfile) {
-      // console.log("Hi", cfuProfile);
+      
       if (!isAddMode) {
         if (cfuProfile?.companyId) {
           dispatch(
@@ -175,10 +179,7 @@ const CFUProfile = () => {
   }, [cfuProfile, dispatch, isAddMode]);
 
   useEffect(() => {
-    console.log("Get CFUG Details ");
     if (clientFundId && userGroupId) {
-      console.log("Get CFUG Details Hit");
-
       dispatch(getNewCFUAndOtherProfilesAsync({ clientFundId, userGroupId }));
     }
   }, [clientFundId, dispatch, userGroupId]);
@@ -335,7 +336,6 @@ const CFUProfile = () => {
     data.CFUProfileStats = [
       ...filteredStats.filter((x) => x.isModified && x.isPermissioned !== null),
     ];
-    console.log("Submit Data", data);
 
     return isAddMode
       ? createHedgeFundProfileAsync(data)
@@ -372,7 +372,6 @@ const CFUProfile = () => {
       delete cfuProfileData["CFUProfileStats"];
       delete cfuProfileData["CFUProfileCategories"];
 
-      console.log("success:", cfuProfileData);
       await agent.CFUProfile.create(cfuProfileData);
       toast.info("Client Fund User Group Profile Saved");
       navigate("/CFUProfileList");

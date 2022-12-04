@@ -27,9 +27,6 @@ const DropDown = ({
     if (onChange) {
       onChange(event);
     }
-
-    // setValue({ selectedID: event.target.value, visibleValue: "Test" });
-    // console.log(event.target.value);
   };
 
   useEffect(() => {
@@ -37,11 +34,6 @@ const DropDown = ({
       setValue(getValues(registerObj.reg.name));
     }
   }, [getValues(registerObj.reg.name)]);
-
-  console.log("drop down Name: ", getValues());
-
-  console.log("drop down Name: ", registerObj);
-  console.log("drop down Value: ", getValues(registerObj.reg.name));
 
   return (
     <FormControl fullWidth>

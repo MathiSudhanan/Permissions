@@ -204,7 +204,6 @@ export const createBaseProfile = async (req: any, res: any) => {
         ],
       },
     };
-    console.log(BPData);
 
     baseProfile = await prisma.baseProfiles.create({ data: BPData });
 

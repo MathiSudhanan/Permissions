@@ -279,8 +279,6 @@ const BaseProfile = () => {
         });
       }
     });
-    console.log("Base Profile Data", baseProfileData);
-    console.log("Base Profile", filteredStats);
 
     try {
       await agent.BaseProfile.modify(id, baseProfileData);
@@ -384,10 +382,6 @@ const BaseProfile = () => {
   //   setFilteredStats(modifiedStats);
   //   console.log("after stat", modifiedStats);
   // };
-
-  const handleTriChkChange = () => {
-    console.log("hi");
-  };
 
   return (
     <Card

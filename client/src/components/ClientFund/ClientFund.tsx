@@ -99,7 +99,6 @@ const ClientFund = () => {
 
   const createClientFundAsync = async (data: IClientFund) => {
     try {
-      console.log(data);
       await agent.ClientFund.create(data);
       toast.info("Client Fund Saved");
       navigate("/clientfundList");

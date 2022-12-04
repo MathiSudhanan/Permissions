@@ -53,11 +53,6 @@ const ResponsiveAppBar = () => {
   const handleCloseNavMenu = (e, path) => {
     setAnchorElNav(null);
   };
-  // const dispatch = useAppDispatch();
-  // const { user } = useAppSelector((state) => {
-  //   console.log(state);
-  //   return state.account;
-  // });
 
   const handleCloseUserMenu = (e, path) => {
     localStorage.removeItem("user");
@@ -70,7 +65,6 @@ const ResponsiveAppBar = () => {
 
   const navigate = useNavigate();
 
-  console.log(isSmallOrLess);
   return (
     <AppBar position="static">
       <Container

@@ -121,10 +121,10 @@ export const cfuProfileSlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setCategory: (state, action) => {
+    setCFUProfile: (state, action) => {
       state.cfuProfile = action.payload;
     },
-    clearCategory: (state) => {
+    clearCFUProfile: (state) => {
       state.cfuProfile = null;
     },
     setBPNameIdList: (state, action) => {
@@ -146,7 +146,6 @@ export const cfuProfileSlice = createSlice({
     builder.addCase(
       createCFUProfileAsync.pending,
       (state: CFUProfileState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -154,7 +153,6 @@ export const cfuProfileSlice = createSlice({
     builder.addCase(
       modifyCFUProfileAsync.pending,
       (state: CFUProfileState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -171,7 +169,6 @@ export const cfuProfileSlice = createSlice({
       deleteCFUProfileAsync.rejected,
       (state: CFUProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -195,7 +192,6 @@ export const cfuProfileSlice = createSlice({
       ),
       (state: CFUProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -218,8 +214,9 @@ export const cfuProfileSlice = createSlice({
       isAnyOf(getCFUProfilesAsync.rejected),
       (state: CFUProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },
 });
+
+export const { setCFUProfile, clearCFUProfile } = cfuProfileSlice.actions;

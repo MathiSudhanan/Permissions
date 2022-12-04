@@ -24,6 +24,7 @@ const defaultValues = {
 
 const Category = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const { id } = useParams();
   const isAddMode = !id;
@@ -71,7 +72,7 @@ const Category = () => {
         fields.forEach((field) => setValue(field, cat[field]));
       });
     }
-  }, []);
+  }, [id, isAddMode, setValue]);
 
   return (
     <Card

@@ -118,7 +118,6 @@ export const companySlice = createSlice({
     builder.addCase(
       createCompanyAsync.pending,
       (state: CompanyState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -126,7 +125,6 @@ export const companySlice = createSlice({
     builder.addCase(
       modifyCompanyAsync.pending,
       (state: CompanyState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -143,7 +141,6 @@ export const companySlice = createSlice({
       deleteCompanyAsync.rejected,
       (state: CompanyState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -157,7 +154,6 @@ export const companySlice = createSlice({
       isAnyOf(createCompanyAsync.rejected, getCompanyByIdAsync.rejected),
       (state: CompanyState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -181,7 +177,6 @@ export const companySlice = createSlice({
       isAnyOf(getCompanyAsync.rejected),
       (state: CompanyState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

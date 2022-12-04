@@ -132,10 +132,10 @@ export const CUGProfileSlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setCategory: (state, action) => {
+    setCUGProfile: (state, action) => {
       state.cugProfile = action.payload;
     },
-    clearCategory: (state) => {
+    clearCUGProfile: (state) => {
       state.cugProfile = null;
     },
   },
@@ -143,7 +143,6 @@ export const CUGProfileSlice = createSlice({
     builder.addCase(
       createCUGProfileAsync.pending,
       (state: CUGProfileState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -151,7 +150,6 @@ export const CUGProfileSlice = createSlice({
     builder.addCase(
       modifyCUGProfileAsync.pending,
       (state: CUGProfileState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -168,7 +166,6 @@ export const CUGProfileSlice = createSlice({
       deleteCUGProfileAsync.rejected,
       (state: CUGProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -191,7 +188,6 @@ export const CUGProfileSlice = createSlice({
       ),
       (state: CUGProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -208,8 +204,9 @@ export const CUGProfileSlice = createSlice({
       isAnyOf(getCUGProfilesAsync.rejected),
       (state: CUGProfileState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },
 });
+
+export const { setCUGProfile, clearCUGProfile } = CUGProfileSlice.actions;

@@ -56,7 +56,7 @@ export const createStatAsync = createAsyncThunk<IStat, FieldValues>(
 );
 
 export const modifyStatAsync = createAsyncThunk<
-IStat,
+  IStat,
   { id: string; values: any }
 >("stat/getStatById", async ({ id, values }, thunkAPI: any) => {
   try {
@@ -102,7 +102,6 @@ export const statSlice = createSlice({
     builder.addCase(
       createStatAsync.pending,
       (state: StatState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -110,7 +109,6 @@ export const statSlice = createSlice({
     builder.addCase(
       modifyStatAsync.pending,
       (state: StatState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -127,7 +125,6 @@ export const statSlice = createSlice({
       deleteStatAsync.rejected,
       (state: StatState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -141,7 +138,6 @@ export const statSlice = createSlice({
       isAnyOf(createStatAsync.rejected, getStatByIdAsync.rejected),
       (state: StatState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -155,7 +151,6 @@ export const statSlice = createSlice({
       isAnyOf(getStatsAsync.rejected),
       (state: StatState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

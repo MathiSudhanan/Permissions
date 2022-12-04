@@ -82,8 +82,6 @@ const UserGroupMapping = () => {
       agent.UserGroupMapping.getById(id).then((cf) => {
         cf.companyId = companyId;
 
-        console.log("CUG", cf);
-
         const fields = [
           "name",
           "description",

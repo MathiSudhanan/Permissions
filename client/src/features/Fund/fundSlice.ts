@@ -119,7 +119,6 @@ export const fundSlice = createSlice({
     builder.addCase(
       createFundAsync.pending,
       (state: FundState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -127,7 +126,6 @@ export const fundSlice = createSlice({
     builder.addCase(
       modifyFundAsync.pending,
       (state: FundState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -144,7 +142,6 @@ export const fundSlice = createSlice({
       deleteFundAsync.rejected,
       (state: FundState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -158,7 +155,6 @@ export const fundSlice = createSlice({
       isAnyOf(createFundAsync.rejected, getFundByIdAsync.rejected),
       (state: FundState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -181,7 +177,6 @@ export const fundSlice = createSlice({
       isAnyOf(getFundsAsync.rejected),
       (state: FundState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

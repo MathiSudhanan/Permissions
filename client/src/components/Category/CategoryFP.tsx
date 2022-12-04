@@ -8,7 +8,6 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 const CategoryFP = ({ ...data }) => {
   let cat = data.data;
-  console.log("FP Cat", cat);
 
   const chipOrder = ["bp", "cugp", "hfp", "cfugp", "cfup"];
   return (
@@ -27,7 +26,7 @@ const CategoryFP = ({ ...data }) => {
           justifyContent: "center",
           alignItems: "center",
           textAlign: "left",
-          mt: "1.2em",
+          mt: "1em",
           fontSize: "1em",
           color: colors.black,
         }}
@@ -38,7 +37,7 @@ const CategoryFP = ({ ...data }) => {
         xs={5}
         item
         sx={{
-          mt: ".9em",
+          mt: ".25em",
           fontSize: "1em",
         }}
       >
@@ -83,6 +82,7 @@ const CategoryFP = ({ ...data }) => {
           color={cat.isPermissioned ? "success" : "error"}
           // disabled
           aria-label="like"
+          size="small"
         >
           {cat.isPermissioned ? <CheckIcon /> : <ClearIcon />}
         </Fab>

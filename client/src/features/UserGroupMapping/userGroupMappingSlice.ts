@@ -18,8 +18,6 @@ const initialState: UserGroupMappingState = {
   userNameList: [],
 };
 
-
-
 export const getUserGroupMappingAsync = createAsyncThunk<IUserGroupMapping[]>(
   "userGroupMapping/getUserGroupMappings",
   async (thunkAPI: any) => {
@@ -100,7 +98,6 @@ export const userGroupMappingSlice = createSlice({
     },
     setUserGroupMappingList: (state, action) => {
       state.userGroupMappingList = action.payload;
-      console.log(state.userGroupMappingList);
     },
     clearUserGroupMappingList: (state) => {
       state.userGroupMappingList = [];
@@ -110,7 +107,6 @@ export const userGroupMappingSlice = createSlice({
     builder.addCase(
       createUserGroupMappingAsync.pending,
       (state: UserGroupMappingState, action: any) => {
-        console.log(action);
         state.status = "pendingAddItem" + action.meta.arg.id;
       }
     );
@@ -118,7 +114,6 @@ export const userGroupMappingSlice = createSlice({
     builder.addCase(
       modifyUserGroupMappingAsync.pending,
       (state: UserGroupMappingState, action: any) => {
-        console.log(action);
         state.status =
           "pendingRemoveItem" + action.meta.arg.id + action.meta.arg.name;
       }
@@ -135,7 +130,6 @@ export const userGroupMappingSlice = createSlice({
       deleteUserGroupMappingAsync.rejected,
       (state: UserGroupMappingState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
     builder.addMatcher(
@@ -155,25 +149,21 @@ export const userGroupMappingSlice = createSlice({
       ),
       (state: UserGroupMappingState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
-    
+
     builder.addMatcher(
       isAnyOf(getUserGroupMappingAsync.fulfilled),
       (state: UserGroupMappingState, action: any) => {
         state.status = "idle";
 
         state.userGroupMappingList = action.payload;
-
-        console.log(state.userGroupMappingList);
       }
     );
     builder.addMatcher(
       isAnyOf(getUserGroupMappingAsync.rejected),
       (state: UserGroupMappingState, action: any) => {
         state.status = "idle";
-        console.log(action.payload);
       }
     );
   },

@@ -27,6 +27,7 @@ import CategoryPermissioned from "../Category/CategoryPermissioned";
 import StatPermissions from "../Stat/StatPermissions";
 import { sortCategoryArray, sortStatArray } from "../../Utils/arrayUtils";
 import {
+  clearCUGProfile,
   getCUGProfileByIdAsync,
   getNewCUGAndBaseProfile,
 } from "../../features/CUGProfile/CUGProfileSlice";
@@ -112,6 +113,10 @@ const CUGProfile = () => {
     setNonPermissionedCategoriesList([]);
     setPermissionedCategoriesList([]);
     setPermissionedStats([]);
+
+    return () => {
+      clearCUGProfile();
+    };
   }, [id, isAddMode, dispatch]);
 
   useEffect(() => {
@@ -242,7 +247,6 @@ const CUGProfile = () => {
         default:
           break;
       }
-      console.log("Dirty", formState.isSubmitting);
     },
     [
       nonPermissionedCategoriesList,
@@ -314,7 +318,7 @@ const CUGProfile = () => {
     data.CUGProfileStats = [
       ...filteredStats.filter((x) => x.isModified && x.isPermissioned !== null),
     ];
-    console.log("Submit Data", data);
+
     return isAddMode
       ? createCUGProfileAsync(data)
       : updateCUGProfileAsync(id, data);
@@ -350,7 +354,6 @@ const CUGProfile = () => {
         }
       });
 
-      console.log("success:", cugProfileData);
       await agent.CUGProfile.create(cugProfileData);
       toast.info("CUG Profile Saved");
       navigate("/CUGProfileList");
@@ -389,8 +392,6 @@ const CUGProfile = () => {
         });
       }
     });
-    console.log("CUG Profile Data", cugProfileData);
-    console.log("CUG Profile", filteredStats);
 
     try {
       await agent.CUGProfile.modify(id, cugProfileData);

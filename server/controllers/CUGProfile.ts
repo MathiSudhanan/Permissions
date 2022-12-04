@@ -127,7 +127,6 @@ export const getNewCUGAndBaseProfile = async (req: any, res: any) => {
 
 export const getCUGProfileById = async (req: any, res: any) => {
   try {
-    console.log(req.params);
     const { id } = req.params;
 
     const CUGProfile = await prisma.cUGProfile.findUnique({
@@ -266,7 +265,7 @@ export const getCUGProfileById = async (req: any, res: any) => {
           }),
       ];
     }
-    console.log(baseProfile);
+
     res.status(200).json(cUGProfile);
   } catch (error) {
     res.status(404).json({ mesage: error });
@@ -277,7 +276,6 @@ export const createCUGProfile = async (req: any, res: any) => {
   let post = req.body;
   let CUGProfile;
   const userId = req.headers["userId"];
-  console.log(post);
 
   try {
     post.CreatedBy = { connect: { id: userId } };
@@ -338,7 +336,6 @@ export const createCUGProfile = async (req: any, res: any) => {
       };
     }
 
-    console.log(CUGData);
     CUGProfile = await prisma.cUGProfile.create({ data: CUGData });
 
     res.status(201).json(CUGProfile);
